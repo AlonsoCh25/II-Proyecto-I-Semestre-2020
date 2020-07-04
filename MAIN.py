@@ -1,1 +1,2 @@
-#### Function in charge of run the game ####
+import CSV
+"""Segundo proyecto programable de Taller de Programacion"""

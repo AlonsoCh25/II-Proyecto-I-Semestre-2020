@@ -32,7 +32,7 @@ class csv_class:
             writer.writerows(a)
 
 #Cargar el archivo CSV.
-archivo_csv = csv_class("matriz.csv","rt")
+archivo_csv = csv_class("ScoreBoard.csv","rt")
 matriz_csv = archivo_csv.get_matriz()
 
 """Para escribir una nueva matriz en la variable"""

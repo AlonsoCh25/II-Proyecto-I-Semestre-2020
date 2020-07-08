@@ -4,7 +4,7 @@
 #Diego Garcia 2020124283
 #Kenneth Castillo 2019062984
 """Libraries"""
-import CSV
+import CLASSES
 import pygame
 
 """Functions"""

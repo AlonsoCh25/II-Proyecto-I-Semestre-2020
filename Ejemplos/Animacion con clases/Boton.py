@@ -52,6 +52,8 @@ def main():
             #alguno de los botones
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if cursor.colliderect(boton.rect):
+                    #Aqui se pone la accion que queremos que haga cuando se hace click en el boton
+                    #En este caso solo puse que cambiara de fondo
                     colordefondo = white
                 if cursor.colliderect(boton2.rect):
                     colordefondo = black

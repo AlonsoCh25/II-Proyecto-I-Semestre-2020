@@ -52,9 +52,11 @@ class Cursor(pygame.Rect):
 
 #Class for create the buttons, require tho images for animation
 class Button(pygame.sprite.Sprite):
-    def __init__(self, image1, image2, x, y):
-        self.image_normal = image1
-        self.image_select = image2
+    def __init__(self, image1, image2, x, y,scale_x,scale_y):
+        self.scale_x = scale_x
+        self.scale_y = scale_y
+        self.image_normal = pygame.transform.scale(image1,(self.scale_x,self.scale_y))
+        self.image_select = pygame.transform.scale(image2,(self.scale_x,self.scale_y))
         self.image_current = self.image_normal
         self.rect = self.image_current.get_rect()
         self.rect.left, self.rect.top = (x,y)
@@ -63,5 +65,43 @@ class Button(pygame.sprite.Sprite):
             self.image_current = self.image_select
         else:
             self.image_current = self.image_normal
-        screen.blit(self.image_current, self.rect)
-
+        #screen.blit(pygame.transform.scale(self.image_current,(self.scale_x,self.scale_y)),self.rect)
+        screen.blit(self.image_current,self.rect)
+"""
+class multi_line_reader():
+    def __init__(self,screen, txt, x,y, font, colour=(128,128,128), justification="left"):
+        self.screen = screen
+        self.txt = txt
+        self.x = x
+        self.y = y
+        self.font = font
+        self.color = colour
+        self.justification = justification
+        self.max_width = 0
+        self.text_bitmaps = []
+        self.text_width = None
+        self.width_diff = None
+        self.bitmap = None
+        self.xpos = None
+    def update(self, screen,y):
+        self.screen.blit(self.bitmap, (self.xpos, y))
+    def funtions(self):
+        self.justification = self.justification[0].upper()
+        self.text = self.txt.strip().replace('\r','').split('\n')
+        #Convert line a line, in bits to represent in screen
+        for line in self.text:
+            self.text_bit_map = self.font.render(line, True, self.color)
+            self.text_width = self.text_bit_map.get_width()
+            self.text_bitmaps.append((self.text_width, self.text_bit_map))
+            if (self.max_width < self.text_width):
+                self.max_width = self.text_width
+        # Paint all the text bitmaps to the screen with justification
+        for (width, self.bitmap) in self.text_bitmaps:
+            self.xpos = self.x
+            self.width_diff = self.max_width - width
+            if (self.justification == 'R'):  # right-justify
+                xpos = self.x + self.width_diff
+            elif (self.justification == 'C'): # centre-justify
+                self.xpos = (self.width_diff // 2)-self.x
+            self.y += self.bitmap.get_height()
+"""

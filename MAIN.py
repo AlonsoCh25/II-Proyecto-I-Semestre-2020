@@ -325,7 +325,9 @@ def transition_login(user):
         for usr in matrix:
             if usr[0] == user:
                 found = True
-                principal_window(matrix,row)
+                csv_scoreboard.write(matrix)
+                csv_scoreboard.update_matrix("ScoreBoard.csv","w")
+                principal_window(row)
             else:
                 row += 1
         if not found:     
@@ -334,9 +336,9 @@ def transition_login(user):
             csv_scoreboard.update_matrix("ScoreBoard.csv","w")
             principal_window(row)
     else:
+        matrix.append([user, initial_scoreboard])
         csv_scoreboard.write(matrix)
         csv_scoreboard.update_matrix("ScoreBoard.csv","w")
-        matrix.append([user, initial_scoreboard])
         principal_window(row)
 
 def multi_line_reader(screen, txt, x,y, font,colour=(128,128,128), justification="left"):

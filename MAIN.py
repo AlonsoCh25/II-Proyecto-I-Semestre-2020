@@ -213,7 +213,7 @@ def login_window():
     
     #Buttons of the screen
     cursor = Cursor()
-    bt_login = Button(img_login,img_login_b,(weight/2-(bt_weight/2)),(weight/3),bt_weight,bt_heigth)
+    bt_login = Button(img_login,img_login_b,(weight/2-(bt_weight/2)),(weight/3+20),bt_weight,bt_heigth)
 
     
     pygame.display.update()

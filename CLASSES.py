@@ -5,22 +5,22 @@ class csv_class:
     def __init__(self, archive, method):
         self.archive = self.read(archive, method)
 
-    #return th matrix in the csv
+    #return the matrix in the csv
     def read(self, archive, method):
         f = open(archive, method)
         data = csv.reader(f)
         data = [row for row in data]
-        #Deleteth empy spaces in the matrix
+        #Delete the empty spaces in the matrix
         for i in data:
             if i == []:
                 data.remove(i)
         return data
 
-    #Modify th variable matrix
+    #Modify the variable matrix
     def write(self, matrix):
         self.archive = matrix
 
-    #return th matrix in the csv
+    #return the matrix in the csv
     def get_matrix(self):
         return self.archive
 
@@ -36,21 +36,21 @@ class csv_class:
 archive_csv = csv_class("ScoreBoard.csv","rt")
 matrix_csv = archive_csv.get_matrix()
 
-"""For write matrix in the variable"""
+"""To write matrix in the variable"""
 # archivo_csv.write("Nueva matriz")
-"""For save the matrix in the csv"""
+"""To save the matrix in the csv"""
 # archivo_csv.update_matriz("matriz.csv","w")
 """NOTE"""
-#Firts write the variable and after save the matrix in the csv
+#First writes the variable and after saves the matrix in the csv
 
-#Class for know the position of the cursor
+#Class to know the position of the cursor
 class Cursor(pygame.Rect):
     def __init__(self):
         pygame.Rect.__init__(self, 0,0,1,1)
     def update(self):
         self.left, self.top = pygame.mouse.get_pos()
 
-#Class for create the buttons, require tho images for animation
+#Class to create the buttons, require two images for animation
 class Button(pygame.sprite.Sprite):
     def __init__(self, image1, image2, x, y,scale_x,scale_y):
         self.scale_x = scale_x
@@ -88,7 +88,7 @@ class multi_line_reader():
     def funtions(self):
         self.justification = self.justification[0].upper()
         self.text = self.txt.strip().replace('\r','').split('\n')
-        #Convert line a line, in bits to represent in screen
+        #Convert line to line, in bits to represent in screen
         for line in self.text:
             self.text_bit_map = self.font.render(line, True, self.color)
             self.text_width = self.text_bit_map.get_width()

@@ -20,7 +20,7 @@ def principal_window(row):
     #Matrix
     matrix = csv_scoreboard.get_matrix()
     
-    #Sttings of the bottons
+    #Settings of the bottons
     bt_weight,bt_heigth = 200,150
 
     #Fonts

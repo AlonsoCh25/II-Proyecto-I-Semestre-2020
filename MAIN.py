@@ -21,7 +21,7 @@ def principal_window(row):
     matrix = csv_scoreboard.get_matrix()
     
     #Settings of the bottons
-    bt_weight,bt_heigth = 200,150
+    bt_weight,bt_heigth = 150,75
 
     #Fonts
     font_user = pygame.font.Font("triforce.ttf",40)
@@ -60,12 +60,12 @@ def principal_window(row):
 
     #Create the buttons and cursor
     cursor = Cursor()
-    bt_credits = Button(img_credits,img_credits_b,(weight-bt_weight),0,bt_weight,bt_heigth)
-    bt_exit = Button(img_exit,img_exit_b,(weight-bt_weight),(height-200),bt_weight,bt_heigth)
-    bt_help = Button(img_help,img_help_b,(weight-bt_weight),100,bt_weight,bt_heigth)
+    bt_credits = Button(img_credits,img_credits_b,(weight-bt_weight-10),0,bt_weight,bt_heigth)
+    bt_exit = Button(img_exit,img_exit_b,(weight-bt_weight-10),(height-200),bt_weight,bt_heigth)
+    bt_help = Button(img_help,img_help_b,(weight-bt_weight-10),100,bt_weight,bt_heigth)
     bt_login = Button(img_login,img_login_b,(weight/2-(bt_weight/2)),(weight/2),bt_weight,bt_heigth)
     bt_play = Button(img_play,img_play_b,(weight/2-(bt_weight/2)),(weight/2+100),bt_weight,bt_heigth)
-    bt_scoreboard = Button(img_scoreboard,img_scoreboard_b,(weight-bt_weight),200,bt_weight,bt_heigth)
+    bt_scoreboard = Button(img_scoreboard,img_scoreboard_b,(weight-bt_weight-10),200,bt_weight,bt_heigth)
     
     #While of the loop
     exit_ = False
@@ -110,7 +110,10 @@ def principal_window(row):
                     exit_ = True
                     pygame.quit()
                     break
-                
+                if cursor.colliderect(bt_login.rect):
+                    print("Push Login")
+                    login_window()
+                    pygame.quit()
                 if cursor.colliderect(bt_play.rect):
                     print("Push Play")
                 if cursor.colliderect(bt_scoreboard.rect):
@@ -199,7 +202,7 @@ def login_window():
     user_rect = txt_user.get_rect()
     
     #Sttings of the bottons
-    bt_weight,bt_heigth = 200,150
+    bt_weight,bt_heigth = 150,75
     
     #Set initial clock
     clock = pygame.time.Clock()
@@ -266,7 +269,7 @@ def login_window():
             if event.type == pygame.KEYDOWN:
                 if active:
                     if event.key == pygame.K_RETURN:
-                        text = ''
+                        transition_login(text)
                     elif event.key == pygame.K_BACKSPACE:
                         text = text[:-1]
                     else:

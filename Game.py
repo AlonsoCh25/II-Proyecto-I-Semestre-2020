@@ -46,6 +46,7 @@ def principal_window():
     bt_fireRook = Button(img_fireRook, img_fireRook_b, 0, 460, 150, 150)
     bt_waterRook = Button(img_waterRook, img_waterRook_b, 0, 625, 150, 150)
 
+    
     #Set timer
     second = 0
     minute = 0

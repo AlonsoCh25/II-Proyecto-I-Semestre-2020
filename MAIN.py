@@ -13,7 +13,8 @@ from CLASSES import *
 from pygame import *
 
 """Functions"""
-def principal_window(row):
+def principal_window():
+    global row
     #Settings of the screen
     pygame.init()
     weight, height = 952,768
@@ -76,7 +77,6 @@ def principal_window(row):
     exit_ = False
     while exit_ != True:
         clock.tick(60)
-        
         screen.blit(pygame.transform.scale(background,(weight,height)),(0,0))
 
         #Put the buttons in the screen
@@ -97,34 +97,42 @@ def principal_window(row):
                 csv_scoreboard.write(matrix)
                 csv_scoreboard.update_matrix("ScoreBoard.csv","w")
                 exit_ = True
+                pygame.quit()
+                break
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if cursor.colliderect(bt_credits.rect):
                     print("Push credits")
-                    credits_window()
                     exit_ = True
                     pygame.quit()
+                    credits_window()
                     break
                 if cursor.colliderect(bt_exit.rect):
                     print("push_exit")
                     csv_scoreboard.write(matrix)
                     csv_scoreboard.update_matrix("ScoreBoard.csv","w")
                     exit_ = True
+                    pygame.quit()
+                    break
                 if cursor.colliderect(bt_help.rect):
                     print("Push Help")
-                    help_window()
                     exit_ = True
                     pygame.quit()
+                    help_window()
                     break
                 if cursor.colliderect(bt_login.rect):
                     print("Push Login")
-                    login_window()
+                    exit_ = True
                     pygame.quit()
+                    login_window()
+                    break
                 if cursor.colliderect(bt_play.rect):
                     print("Push Play")
                 if cursor.colliderect(bt_scoreboard.rect):
                     print("Push Scoreboard")
-                    scoreboard_window()
+                    exit_ = True
                     pygame.quit()
+                    scoreboard_window()
+                    break
 
 
 
@@ -168,15 +176,6 @@ def credits_window():
     #While of the loop
     exit_ = False
     while exit_ != True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                exit_ = True
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if cursor.colliderect(bt_return.rect):
-                    print("Push Return Menu")
-                    principal_window(0)
-                    pygame.quit()
-                
         #Set the blits in the screen
         bt_return.update(credits_screen,cursor)
         pygame.display.update()
@@ -184,6 +183,21 @@ def credits_window():
 
         pygame.display.update()
         clock.tick(60)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit_ = True
+                pygame.quit()
+                break
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if cursor.colliderect(bt_return.rect):
+                    print("Push Return Menu")
+                    exit_ = True
+                    pygame.quit()
+                    principal_window()
+                    break
+                
+        
     pygame.quit()
 
 def login_window():
@@ -286,12 +300,15 @@ def login_window():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit_ = True
+                pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if cursor.colliderect(bt_login.rect):
                     if text != "" and int(parameter)>0:
-                        transition_login(text)
                         print("Push Login")
                         exit_ = True
+                        pygame.quit()
+                        transition_login(text)
+                        break
                     
                 # when the user click in the box, this is active
                 if box_input.collidepoint(event.pos):
@@ -321,7 +338,8 @@ def login_window():
                     if event.key == pygame.K_BACKSPACE:
                         parameter = parameter[:-1]
                     else:
-                        parameter += event.unicode
+                        if event.key>=48 and event.key<=59:
+                            parameter += event.unicode
     pygame.quit()
     
 def help_window():
@@ -358,20 +376,25 @@ def help_window():
     #While of the loop
     exit_ = False
     while exit_ != True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                exit_ = True
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if cursor.colliderect(bt_return.rect):
-                    print("Push Return Menu")
-                    principal_window(0)
-                    pygame.quit()
         clock.tick(60)
         pygame.display.update()
         #Set the blits in the screen
         bt_return.update(help_screen,cursor)
         pygame.display.update()
         cursor.update()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit_ = True
+                pygame.quit()
+                break
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if cursor.colliderect(bt_return.rect):
+                    print("Push Return Menu")
+                    exit_ = True
+                    pygame.quit()
+                    principal_window()
+                    break
     pygame.quit()
 def scoreboard_window():
     #Settings of the screen
@@ -386,11 +409,16 @@ def scoreboard_window():
     
     #Set initial clock
     clock = pygame.time.Clock()
-    
+
+    #Load the csv
+    archive_csv = csv_class("ScoreBoard.csv","rt")
+    matrix_csv = archive_csv.get_matrix()
+
+    print(matrix_csv)
     #Load the txt
     a_txt = open("scoreboard.txt")
     txt = a_txt.read()
-    
+    print(txt)
     #Images of the screen
     background = pygame.image.load("rsc/window_scoreboard.png")
 
@@ -406,21 +434,25 @@ def scoreboard_window():
     pygame.display.update()
     #While of the loop
     exit_ = False
-    while exit_ != True: 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                exit_ = True
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if cursor.colliderect(bt_return.rect):
-                    print("Push Return Menu")
-                    principal_window(0)
-                    pygame.quit()
+    while exit_ != True:
         clock.tick(60)
-        pygame.display.update()
         #Set the blits in the screen
         bt_return.update(scoreboard_screen,cursor)
         pygame.display.update()
         cursor.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit_ = True
+                pygame.quit()
+                break
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if cursor.colliderect(bt_return.rect):
+                    exit_ = True
+                    print("Push Return Menu")
+                    pygame.quit()
+                    principal_window()
+                    break
+                    
     pygame.quit()
 
 def transition_login(user):
@@ -429,6 +461,7 @@ def transition_login(user):
     
     initial_scoreboard = "0"
     found = False
+    global row
     row = 0
     if matrix != []:
         for usr in matrix:
@@ -436,19 +469,19 @@ def transition_login(user):
                 found = True
                 csv_scoreboard.write(matrix)
                 csv_scoreboard.update_matrix("ScoreBoard.csv","w")
-                principal_window(row)
+                principal_window()
             else:
                 row += 1
         if not found:     
             matrix.append((user, initial_scoreboard))
             csv_scoreboard.write(matrix)
             csv_scoreboard.update_matrix("ScoreBoard.csv","w")
-            principal_window(row)
+            principal_window()
     else:
         matrix.append([user, initial_scoreboard])
         csv_scoreboard.write(matrix)
         csv_scoreboard.update_matrix("ScoreBoard.csv","w")
-        principal_window(row)
+        principal_window()
 
 def multi_line_reader(screen, txt, x,y, font,colour=(128,128,128), justification="left"):
     def update():

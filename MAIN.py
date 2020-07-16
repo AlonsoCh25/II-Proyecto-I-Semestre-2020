@@ -4,6 +4,11 @@
 #Diego Garcia 2020124283
 #Kenneth Castillo 2019062984
 """Libraries"""
+#######################COSAS POR CAMBIAR#######################
+# HACER LA VARIABLE ROW GLOBAL
+#
+###############################################################
+
 from CLASSES import *
 from pygame import *
 
@@ -118,6 +123,9 @@ def principal_window(row):
                     print("Push Play")
                 if cursor.colliderect(bt_scoreboard.rect):
                     print("Push Scoreboard")
+                    scoreboard_window()
+                    pygame.quit()
+
 
 
         
@@ -129,10 +137,12 @@ def credits_window():
     pygame.init()
     pygame.font.init
     weight, height = 800,600
+    bt_weight,bt_heigth = 70,70
     credits_screen = pygame.display.set_mode((weight,height))
-    
+
     #FONT
-    font = pygame.font.Font(None,20)
+    font = pygame.font.Font("triforce.ttf",35)
+
     
     #Set initial clock
     clock = pygame.time.Clock()
@@ -142,16 +152,17 @@ def credits_window():
     txt = a_txt.read()
     
     #Images of the screen
-    background = pygame.image.load("rsc/background.jpeg")
+    background = pygame.image.load("rsc/window_credits.png")
     
     #Background
     credits_screen.blit(pygame.transform.scale(background,(weight,height)),(0,0))
 
     y = height-200
     #Call the functions of the multi_line_reader
-    multi_line_reader(credits_screen, txt, 20,20, font,(255,255,255), justification="center")
-    
-    pygame.display.update()
+    multi_line_reader(credits_screen, txt, -225,190, font,(255,255,255), justification="center")
+    img_return=pygame.image.load("rsc/btn_return.png")
+    cursor = Cursor()
+    bt_return =Button(img_return,img_return,(weight-bt_weight-10),(height-100),bt_weight,bt_heigth)
 
     
     #While of the loop
@@ -160,9 +171,16 @@ def credits_window():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit_ = True
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if cursor.colliderect(bt_return.rect):
+                    print("Push Return Menu")
+                    principal_window(0)
+                    pygame.quit()
                 
         #Set the blits in the screen
-        
+        bt_return.update(credits_screen,cursor)
+        pygame.display.update()
+        cursor.update()
 
         pygame.display.update()
         clock.tick(60)
@@ -310,11 +328,12 @@ def help_window():
     #Settings of the screen
     pygame.init()
     pygame.font.init
-    weight, height = 800,600
-    help_screen = pygame.display.set_mode((weight,height))
+    weight, height = 1050,768
+    bt_weight,bt_heigth = 70,70
+    help_screen = pygame.display.set_mode((weight, height))
     
     #FONT
-    font = pygame.font.Font(None,20)
+    font = pygame.font.Font("triforce.ttf",16)
     
     #Set initial clock
     clock = pygame.time.Clock()
@@ -324,14 +343,17 @@ def help_window():
     txt = a_txt.read()
     
     #Images of the screen
-    background = pygame.image.load("rsc/background.jpeg")
-    
+    background = pygame.image.load("rsc/window_help.png")
+
+
     #Background
-    help_screen.blit(pygame.transform.scale(background,(weight,height)),(0,0))
+    help_screen.blit(pygame.transform.scale(background,(weight, height)),(0,0))
     
     #Call the functions of the multi_line_reader
-    multi_line_reader(help_screen, txt, 20,20, font,(255,255,255), justification="left")
-
+    multi_line_reader(help_screen, txt, 20,190, font,(255,255,255), justification="left-justify")
+    img_return=pygame.image.load("rsc/btn_return.png")
+    cursor = Cursor()
+    bt_return =Button(img_return,img_return,(weight-bt_weight-10),(height-100),bt_weight,bt_heigth)
     pygame.display.update()
     #While of the loop
     exit_ = False
@@ -339,11 +361,66 @@ def help_window():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit_ = True
-
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if cursor.colliderect(bt_return.rect):
+                    print("Push Return Menu")
+                    principal_window(0)
+                    pygame.quit()
         clock.tick(60)
         pygame.display.update()
         #Set the blits in the screen
+        bt_return.update(help_screen,cursor)
+        pygame.display.update()
+        cursor.update()
+    pygame.quit()
+def scoreboard_window():
+    #Settings of the screen
+    pygame.init()
+    pygame.font.init
+    weight, height = 1050,768
+    bt_weight,bt_heigth = 70,70
+    scoreboard_screen = pygame.display.set_mode((weight, height))
+    
+    #FONT
+    font = pygame.font.Font("triforce.ttf",16)
+    
+    #Set initial clock
+    clock = pygame.time.Clock()
+    
+    #Load the txt
+    a_txt = open("scoreboard.txt")
+    txt = a_txt.read()
+    
+    #Images of the screen
+    background = pygame.image.load("rsc/window_scoreboard.png")
 
+
+    #Background
+    scoreboard_screen.blit(pygame.transform.scale(background,(weight, height)),(0,0))
+    
+    #Call the functions of the multi_line_reader
+    multi_line_reader(scoreboard_screen, txt, 20,190, font,(255,255,255), justification="left-justify")
+    img_return=pygame.image.load("rsc/btn_return.png")
+    cursor = Cursor()
+    bt_return =Button(img_return,img_return,(weight-bt_weight-10),(height-100),bt_weight,bt_heigth)
+    pygame.display.update()
+    #While of the loop
+    exit_ = False
+    while exit_ != True: 
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit_ = True
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if cursor.colliderect(bt_return.rect):
+                    print("Push Return Menu")
+                    principal_window(0)
+                    pygame.quit()
+        clock.tick(60)
+        pygame.display.update()
+        #Set the blits in the screen
+        bt_return.update(scoreboard_screen,cursor)
+        pygame.display.update()
+        cursor.update()
     pygame.quit()
 
 def transition_login(user):

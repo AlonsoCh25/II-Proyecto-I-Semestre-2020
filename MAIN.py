@@ -173,7 +173,7 @@ def login_window():
     #Settings of the screen
     pygame.init()
     pygame.font.init
-    weight, height = 400,300
+    weight, height = 500,400
     login_screen = pygame.display.set_mode((weight,height))
     
     
@@ -184,22 +184,32 @@ def login_window():
     
     #Text input
     box_input = pygame.Rect(100, 110, 140, 32)
+    box_input_p = pygame.Rect(200, 225, 140, 32)
 
     #Color of the box
     color_inactive = (0,0,0)
     color_active = (255,255,255)
     color = color_inactive
 
+    color_inactive_p = (0,0,0)
+    color_active_p = (255,255,255)
+    color_p = color_inactive
     #Set the initial active of the box
     active = False
+    active_p = False
 
     #Content the text of the user
     text = ''
     User = "User Name"
+    text_attack = "Attack Frequency"
+    parameter = ""
 
     #render the elements
     txt_user = font_user.render(User, True, (0,0,0))
     user_rect = txt_user.get_rect()
+
+    txt_attack = font_user.render(text_attack, True, (0,0,0))
+    attack_rect = txt_attack.get_rect()
     
     #Sttings of the bottons
     bt_weight,bt_heigth = 150,75
@@ -216,7 +226,7 @@ def login_window():
     
     #Buttons of the screen
     cursor = Cursor()
-    bt_login = Button(img_login,img_login_b,(weight/2-(bt_weight/2)),(weight/3+20),bt_weight,bt_heigth)
+    bt_login = Button(img_login,img_login_b,(weight/2-(bt_weight/2)),(weight/3+150),bt_weight,bt_heigth)
 
     
     pygame.display.update()
@@ -228,20 +238,26 @@ def login_window():
 
         #render the elements
         txt = font.render(text, True, (0,0,0))
+        txt_parameter = font.render(parameter, True, (0,0,0))
         
-        #Scale the boxof the text
+        #Scale the box of the text
         width = max(100, txt.get_width()+10)
         box_input.w = width
         box_input.x = round((weight//2)-(width//2))
-        
+
+        width_p = max(100, txt_parameter.get_width()+10)
+        box_input_p.w = width_p
+        box_input_p.x = round((weight//2)-(width_p//2))
                                 
-        
-        
         #Set the blits in the screen
         login_screen.blit(txt, (box_input.x+5, box_input.y+5))
         pygame.draw.rect(login_screen, color, box_input, 2)
         bt_login.update(login_screen,cursor)
         login_screen.blit(txt_user,(round(((weight/2)-(user_rect.w/2))),60))
+
+        login_screen.blit(txt_parameter, (box_input_p.x+5, box_input_p.y+5))
+        pygame.draw.rect(login_screen, color_p, box_input_p, 2)
+        login_screen.blit(txt_attack,(round(((weight/2)-(attack_rect.w/2))),175))
         
         cursor.update()
 
@@ -254,9 +270,10 @@ def login_window():
                 exit_ = True
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if cursor.colliderect(bt_login.rect):
-                    transition_login(text)
-                    print("Push Login")
-                    exit_ = True
+                    if text != "" and int(parameter)>0:
+                        transition_login(text)
+                        print("Push Login")
+                        exit_ = True
                     
                 # when the user click in the box, this is active
                 if box_input.collidepoint(event.pos):
@@ -266,15 +283,27 @@ def login_window():
                     active = False
                 #Set the current color of the box
                 color = color_active if active else color_inactive
+                
+                # when the user click in the box, this is active for the other box
+                if box_input_p.collidepoint(event.pos):
+                    # Set the value of the variable for the other box
+                    active_p = not active_p
+                else:
+                    active_p = False
+                #Set the current color of the box for the other box
+                color_p = color_active_p if active_p else color_inactive_p
+                
             if event.type == pygame.KEYDOWN:
                 if active:
-                    if event.key == pygame.K_RETURN:
-                        transition_login(text)
-                    elif event.key == pygame.K_BACKSPACE:
+                    if event.key == pygame.K_BACKSPACE:
                         text = text[:-1]
                     else:
                         text += event.unicode
-        
+                if active_p:
+                    if event.key == pygame.K_BACKSPACE:
+                        parameter = parameter[:-1]
+                    else:
+                        parameter += event.unicode
     pygame.quit()
     
 def help_window():

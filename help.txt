@@ -1,0 +1,30 @@
+Interfaz
+Ventanas principales:
+Al iniciar el juego nos pedira automaticamente que ingresemos el usuario, de esta forma si nuestro usuario coincide con alguno existente 
+se cargara nuestro marcador, por lo contrario, si no se asocia ningun marcador a ese usuario se creara automaticamente uno nuevo.Ademas, 
+esta pantalla cuenta con una caja de texto donde se puede elegir la frecuencia inicial a la cual atacan los rooks.
+
+Ventana Menu: 
+En la parte superior izquierda de esta ventana se encuentra el nombre del usuario y el marcador mas reciente, ademas cuenta con cinco botones:
+Credits: En esta ventana se encuentra toda la informacion acerca de los desarrolladores, ademas de un boton para volver al menu.
+Help: En esta ventana se encuentra toda la informacion acerca de la funcionalidad del juego. 
+Scoreboard: Aqui se encuentra toda la informacion acerca de los marcadores recientes de los usuarios
+Play: En este boton podemos acceder a la ventana del juego principal
+Exit: En este boton podemos cerrar completamente el juego.
+En cada ventana se encuentra un boton para volver al menu
+
+Juego principal
+En esta ventana se encuentra el juego principal. Se puede observar que en la parte superior izquierda se encuentra el nombre del jugador y 
+el tiempo que ha transcurrido desde que se inicio el juego, en la parte superior derecha se encuentra la cantidad de diamantes con los que 
+se cuenta, y en la parte izquierda se encuentran nuestros personajes de juego llamados rooks y por ultimo observamos el tablero de 9x5 que 
+es el escenario principal del juego.
+
+Funcionalidad del juego
+El juego basicamente consiste en defenderse de los ataques que realizan los avatars, estos personajes se generan de forma aleatoria en el tablero y 
+cuentan con distintas habilidades para atacar (mismas que se deben de descubrir durante el juego), para defenderse de los avatars el jugador debe de 
+usar otra clase de personajes llamados rooks, estos personajes tambien cuentan con sus respectivas habilidades (mismas que se deben de descubrir durante 
+el juego para poder hacer uso de los rooks se requiere de un tipo de monedas llamadas diamantes, cada rook cuenta con un precio especifico segun su habilidad; 
+estos diamantes son ganados cada vez que se elimine un avatar con una ganancia 75, ademas se pueden recolectar a traves de posicionar el cursor sobre 
+las gemas que aparecen de forma aleatoria en todo el tablero.
+La partida cuenta con tres niveles de dificultad, cada nivel aumenta la dificultad en un 30%, de esta forma la partida finaliza al completar los 3 niveles o al 
+fallar en el intento de conseguirlo.

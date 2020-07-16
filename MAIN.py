@@ -14,7 +14,12 @@ from pygame import *
 
 """Functions"""
 def principal_window():
+    #Contains the row of the matrix the user is in
     global row
+    
+    #Contain the parameter of attack frequency
+    global parameter
+    
     #Settings of the screen
     pygame.init()
     weight, height = 952,768
@@ -234,6 +239,7 @@ def login_window():
     text = ''
     User = "User Name"
     text_attack = "Attack Frequency"
+    global parameter
     parameter = ""
 
     #render the elements

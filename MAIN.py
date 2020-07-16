@@ -405,7 +405,7 @@ def scoreboard_window():
     scoreboard_screen = pygame.display.set_mode((weight, height))
     
     #FONT
-    font = pygame.font.Font("triforce.ttf",16)
+    font = pygame.font.Font("triforce.ttf",32)
     
     #Set initial clock
     clock = pygame.time.Clock()
@@ -414,11 +414,13 @@ def scoreboard_window():
     archive_csv = csv_class("ScoreBoard.csv","rt")
     matrix_csv = archive_csv.get_matrix()
 
-    print(matrix_csv)
-    #Load the txt
-    a_txt = open("scoreboard.txt")
-    txt = a_txt.read()
-    print(txt)
+    txt = ""
+    for line in matrix_csv:
+        txt += "\n"
+        txt += "\n"
+        for t in line:
+            txt += str(t)
+            
     #Images of the screen
     background = pygame.image.load("rsc/window_scoreboard.png")
 
@@ -427,7 +429,7 @@ def scoreboard_window():
     scoreboard_screen.blit(pygame.transform.scale(background,(weight, height)),(0,0))
     
     #Call the functions of the multi_line_reader
-    multi_line_reader(scoreboard_screen, txt, 20,190, font,(255,255,255), justification="left-justify")
+    multi_line_reader(scoreboard_screen, txt, -(470),200, font,(255,255,255), justification="center")
     img_return=pygame.image.load("rsc/btn_return.png")
     cursor = Cursor()
     bt_return =Button(img_return,img_return,(weight-bt_weight-10),(height-100),bt_weight,bt_heigth)
@@ -459,7 +461,7 @@ def transition_login(user):
     csv_scoreboard = csv_class("ScoreBoard.csv","rt")
     matrix = csv_scoreboard.get_matrix()
     
-    initial_scoreboard = "0"
+    initial_scoreboard = " 0 "
     found = False
     global row
     row = 0

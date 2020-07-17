@@ -1,11 +1,10 @@
-Ingenieros:
+Created by:
 Luis Diego Garcia Rojas
 Marcos Gonzales Araya
 Kenneth Castillo Herrera
 
 
 Tecnologico de Costa Rica
-Ingenieria en Computadores
-
+Computer Engineering
 
 Version 1.0

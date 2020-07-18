@@ -347,4 +347,5 @@ def principal_window():
         pygame.display.update()
 
     pygame.quit()
+
 principal_window()

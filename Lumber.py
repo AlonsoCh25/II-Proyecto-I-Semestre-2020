@@ -32,8 +32,8 @@ class Lumberjack(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(self.image, (95, 80))
             self.change_pos = 10
             self.counter_pos += 1
+            self.song.play()
             if self.counter_pos >= self.change_pos:
-                self.song.play()
                 self.image = pygame.image.load('images/avatars/lumberjack1.png')
                 self.image = pygame.transform.scale(self.image, (95, 80))
                 self.counter_pos = 0

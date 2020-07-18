@@ -2,7 +2,6 @@ import pygame
 
 arrows = pygame.sprite.Group()
 FPS = 30
-pygame.mixer.init()
 """__________________________________________________________________________________"""
 
 class Archer(pygame.sprite.Sprite):
@@ -33,8 +32,8 @@ class Archer(pygame.sprite.Sprite):
             self.image = pygame.image.load('images/avatars/archer2.png')
             self.image = pygame.transform.scale(self.image, (95, 80))
             self.change_counter += 1
+            self.song.play()
             if self.change_counter >= change_pos:
-                self.song.play()
                 arrow = Arrow(self.rect.centerx, self.rect.bottom)
                 arrows.add(arrow)
                 self.counter_attack = 0

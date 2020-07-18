@@ -10,7 +10,7 @@ class Canibal(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.imagen = pygame.image.load('images/canibalA.png')
         self.rect = self.imagen.get_rect()
-        self.music = pygame.mixer.Sound("Sounds/Cannibal_a.wav")
+        self.music = pygame.mixer.music.load("Sounds/Menu.mp3")
         self.attack_time = 3
         self.movement_time = 14
         self.health = 25
@@ -21,8 +21,9 @@ class Canibal(pygame.sprite.Sprite):
         self.counter_pos = 0
         self.counter_attack = 0
         self.counter_move = 0
+
     def play_song(self):
-        self.music.play()
+        pygame.mixer.music.play()
 
     def update(self, superficie):
         superficie.blit(self.imagen, self.rect)

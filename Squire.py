@@ -10,6 +10,7 @@ class Squire(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('images/avatars/squire1.png')
         self.image = pygame.transform.scale(self.image, (95, 80))
+        self.song = pygame.mixer.Sound("Sounds/squire.ogg")
         self.rect = self.image.get_rect()
         self.attack_time = 15
         self.movement_time = 10
@@ -27,6 +28,7 @@ class Squire(pygame.sprite.Sprite):
         self.counter_attack += 1
 
         if self.counter_attack >= self.attack_time * FPS:
+            self.song.play()
             change_pos = 10
             self.image = pygame.image.load('images/avatars/squire2.png')
             self.image = pygame.transform.scale(self.image, (95, 80))

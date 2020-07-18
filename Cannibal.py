@@ -10,6 +10,7 @@ class Cannibal(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('images/avatars/cannibal1.png')
         self.image = pygame.transform.scale(self.image, (95, 80))
+        self.song = pygame.mixer.Sound("Sounds/Cannibal_a.ogg")
         self.rect = self.image.get_rect()
         self.attack_time = 3
         self.movement_time = 14

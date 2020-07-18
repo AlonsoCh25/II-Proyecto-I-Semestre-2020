@@ -54,7 +54,7 @@ class Squire(pygame.sprite.Sprite):
 class Sword(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("images/avatars/sword.png")
+        self.image = pygame.image.load("images/avatars/axe.png")
         self.image = pygame.transform.rotate(self.image, 270)
         self.image = pygame.transform.scale(self.image, (50, 50))
         self.rect = self.image.get_rect()

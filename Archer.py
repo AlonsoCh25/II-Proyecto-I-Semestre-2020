@@ -2,7 +2,7 @@ import pygame
 
 arrows = pygame.sprite.Group()
 FPS = 30
-
+pygame.mixer.init()
 """__________________________________________________________________________________"""
 
 class Archer(pygame.sprite.Sprite):

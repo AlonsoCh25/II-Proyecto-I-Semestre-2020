@@ -92,8 +92,6 @@ def avatar_spawn():
             avatars.add(cannibal)
             contador_3 = 0
 
-    print(contador_3)
-
 def crystal_spawn():
     global contador_2, currency, FPS, button_25, button_50, button_100
     click = pygame.mouse.get_pressed()
@@ -196,7 +194,7 @@ def draw_grid(column, row):
         return draw_grid(column + 1, row)
 
 def principal_window():
-    global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix
+    global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level
 
     pygame.mixer.init()
     pygame.init()
@@ -262,9 +260,15 @@ def principal_window():
             if gridMatrix[row][column] == 4:
                 rooks.add(Water(2, 295 + (column * 95), 209 + (row * 80)))
 
-    pygame.mixer_music.load('Sounds/Battle1.mp3')
-    pygame.mixer.music.play()
-
+    if level == 1:
+        pygame.mixer_music.load('Sounds/Battle1.mp3')
+        pygame.mixer.music.play()
+    if level == 2:
+        pygame.mixer_music.load('Sounds/Battle2.mp3')
+        pygame.mixer.music.play()
+    if level == 3:
+        pygame.mixer_music.load('Sounds/Battle3.mp3')
+        pygame.mixer.music.play()
 
     #While loop
     exit = False
@@ -323,6 +327,7 @@ def principal_window():
             screen.blit(img_squareSelect2, (0, 625))
         if selected == 'REMOVE':
             screen.blit(img_squareSelect2, (0, 775))
+
 
         # Place buttons in the screen
         cursor.update()

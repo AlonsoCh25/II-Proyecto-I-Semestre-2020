@@ -10,6 +10,7 @@ class Lumberjack(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('images/avatars/lumberjack1.png')
         self.image = pygame.transform.scale(self.image, (95, 80))
+        self.song = pygame.mixer.Sound("Sounds/lumberjack.ogg")
         self.rect = self.image.get_rect()
         self.attack_time = 5
         self.movement_time = 13
@@ -32,6 +33,7 @@ class Lumberjack(pygame.sprite.Sprite):
             self.change_pos = 10
             self.counter_pos += 1
             if self.counter_pos >= self.change_pos:
+                self.song.play()
                 self.image = pygame.image.load('images/avatars/lumberjack1.png')
                 self.image = pygame.transform.scale(self.image, (95, 80))
                 self.counter_pos = 0

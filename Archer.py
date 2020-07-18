@@ -11,6 +11,7 @@ class Archer(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('images/avatars/archer1.png')
         self.image = pygame.transform.scale(self.image, (95, 80))
+        self.song = pygame.mixer.Sound("Sounds/archer_attack.ogg")
         self.rect = self.image.get_rect()
         self.attack_time = 10
         self.movement_time = 12
@@ -33,6 +34,7 @@ class Archer(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(self.image, (95, 80))
             self.change_counter += 1
             if self.change_counter >= change_pos:
+                self.song.play()
                 arrow = Arrow(self.rect.centerx, self.rect.bottom)
                 arrows.add(arrow)
                 self.counter_attack = 0

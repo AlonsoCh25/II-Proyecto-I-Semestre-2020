@@ -197,6 +197,8 @@ def draw_grid(column, row):
 
 def principal_window():
     global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix
+
+    pygame.mixer.init()
     pygame.init()
     width , height = 1000, 1000
     screen = pygame.display.set_mode((width, height))
@@ -259,6 +261,9 @@ def principal_window():
                 rooks.add(Fire(2, 295 + (column * 95), 209 + (row * 80)))
             if gridMatrix[row][column] == 4:
                 rooks.add(Water(2, 295 + (column * 95), 209 + (row * 80)))
+
+    pygame.mixer_music.load('Sounds/Battle1.mp3')
+    pygame.mixer.music.play()
 
 
     #While loop

@@ -28,11 +28,11 @@ class Squire(pygame.sprite.Sprite):
         self.counter_attack += 1
 
         if self.counter_attack >= self.attack_time * FPS:
-            self.song.play()
             change_pos = 10
             self.image = pygame.image.load('images/avatars/squire2.png')
             self.image = pygame.transform.scale(self.image, (95, 80))
             self.change_counter += 1
+            self.song.play()
             if self.change_counter >= change_pos:
                 sword = Sword(self.rect.centerx, self.rect.bottom)
                 swords.add(sword)

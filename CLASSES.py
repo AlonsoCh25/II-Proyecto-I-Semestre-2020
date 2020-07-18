@@ -53,6 +53,7 @@ class Cursor(pygame.Rect):
 #Class to create the buttons, require two images for animation
 class Button(pygame.sprite.Sprite):
     def __init__(self, image1, image2, x, y,scale_x,scale_y):
+        pygame.sprite.Sprite.__init__(self)
         self.scale_x = scale_x
         self.scale_y = scale_y
         self.image_normal = pygame.transform.scale(image1,(self.scale_x,self.scale_y))

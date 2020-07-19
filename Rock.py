@@ -1,7 +1,6 @@
 import pygame
 
 rock_attacks = pygame.sprite.Group()
-rock_rooks = pygame.sprite.Group()
 FPS = 30
 
 """__________________________________________________________________________________"""
@@ -19,30 +18,25 @@ class Rock(pygame.sprite.Sprite):
         self.rect.y = y
         self.counter_attack = 0
 
+    def decrease_health(self, damage):
+        self.health -= damage
+
     def update(self, superficie):
-        superficie.blit(self.image, self.rect)
-
-    def spawn(self):
-        #argumento if
-            self.spawn = True #hay que ver como definimos el spawn de estas tambien
-
-    def attack(self):
         self.counter_attack += 1
-        if self.counter_attack >= self.attack_time*FPS:
+        if self.counter_attack >= self.attack_time * FPS:
             rock = RockAttack(self.rect.centerx, self.rect.bottom)
             rock_attacks.add(rock)
-            rock_rooks.add(rock)
             self.counter_attack = 0
 
-    def rect(self):
-        return self.rect
+        superficie.blit(self.image, self.rect)
 
 """__________________________________________________________________________________"""
 
 class RockAttack(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("images/rooks/rock_attack.png")
+        self.image = pygame.image.load("images/rooks/rock_rook_attack.png")
+        self.image = pygame.transform.scale(self.image, (50, 50))
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.centerx = x

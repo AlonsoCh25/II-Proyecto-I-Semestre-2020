@@ -68,6 +68,8 @@ class Button(pygame.sprite.Sprite):
             self.image_current = self.image_normal
         #screen.blit(pygame.transform.scale(self.image_current,(self.scale_x,self.scale_y)),self.rect)
         screen.blit(self.image_current,self.rect)
+
+
 """
 class multi_line_reader():
     def __init__(self,screen, txt, x,y, font, colour=(128,128,128), justification="left"):

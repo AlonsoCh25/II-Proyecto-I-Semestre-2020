@@ -1,10 +1,11 @@
 import pygame
 import random
+import playsound
 from CLASSES import *
-from Sand import *
-from Rock import *
-from Fire import *
-from Water import *
+from Sand import sand_attacks, Sand, SandAttack
+from Rock import rock_attacks, Rock, RockAttack
+from Fire import fire_attacks, Fire, FireAttack
+from Water import water_attacks, Water, WaterAttack
 from Archer import arrows, Archer, Arrow
 from Squire import swords, Squire, Sword
 from Lumber import *
@@ -16,6 +17,14 @@ buttons_grid = pygame.sprite.Group()
 button_25 = pygame.sprite.Group()
 button_50 = pygame.sprite.Group()
 button_100 = pygame.sprite.Group()
+sandrooks = pygame.sprite.Group()
+rockrooks = pygame.sprite.Group()
+firerooks = pygame.sprite.Group()
+waterrooks = pygame.sprite.Group()
+archeravatars = pygame.sprite.Group()
+squireavatars = pygame.sprite.Group()
+lumberavatars = pygame.sprite.Group()
+cannibalavatars = pygame.sprite.Group()
 rooks = pygame.sprite.Group()
 avatars = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
@@ -34,6 +43,7 @@ selected = ''
 contador = 0
 contador_2 = 0
 contador_3 = 0
+contador_4 = 0
 
 #Set currency
 currency = 900
@@ -57,6 +67,9 @@ elif level == 2:
 elif level == 3:
     background = pygame.image.load("images/background_3.png")
 
+#Set column, row of grid
+group = 0
+
 #Set avatars spawn timer
 if level == 1:
     avatar_spawnTime = 4
@@ -65,8 +78,6 @@ if level == 2:
 elif level == 3:
     avatar_spawnTime = 4 - (4 * 0.6)
 
-def damage_rooks():
-    pass
 
 def avatar_spawn():
     global contador_3, FPS, currency, avatar_spawnTime, gridMatrix
@@ -75,21 +86,22 @@ def avatar_spawn():
     if avatar_spawnTime <= contador_3 <= avatar_spawnTime + 0.04:
         random_avatar = random.randint(0,3)
         random_column = random.randint(0,4)
+        random_avatar = 0
         if random_avatar == 0 and gridMatrix[0][random_column] == 0:
-            archer = Archer(x + (random_column * 95), y)
-            avatars.add(archer)
+            archeravatars.add(Archer(x + (random_column * 95), y))
+            avatars.add(archeravatars)
             contador_3 = 0
         if random_avatar == 1 and gridMatrix[0][random_column] == 0:
-            squire = Squire(x + (random_column * 95), y)
-            avatars.add(squire)
+            squireavatars.add(Squire(x + (random_column * 95), y))
+            avatars.add(squireavatars)
             contador_3 = 0
         if random_avatar == 2 and gridMatrix[0][random_column] == 0:
-            lumberjack = Lumberjack(x + (random_column * 95), y)
-            avatars.add(lumberjack)
+            lumberavatars.add(Lumberjack(x + (random_column * 95), y))
+            avatars.add(lumberavatars)
             contador_3 = 0
         if random_avatar == 3 and gridMatrix[0][random_column] == 0:
-            cannibal = Cannibal(x + (random_column * 95), y)
-            avatars.add(cannibal)
+            cannibalavatars.add(Cannibal(x + (random_column * 95), y))
+            avatars.add(cannibalavatars)
             contador_3 = 0
 
 def crystal_spawn():
@@ -129,8 +141,8 @@ def crystal_spawn():
         button_100.empty()
         contador_2 = 0
 
-def button_matrix(posx, posy, column, row, button):
-    global selected, currency, rooks, all_sprites
+def button_matrix(posx, posy, column, row, button, screen):
+    global selected, currency, rooks, all_sprites, sand_rook
 
     click = pygame.mouse.get_pressed()
     img_square = pygame.image.load("images/square.png")
@@ -140,42 +152,65 @@ def button_matrix(posx, posy, column, row, button):
     if cursor.colliderect(button.rect):
         if click[0] == 1:
             if selected != '' and gridMatrix[row][column] == 0:
-                if selected == 'SANDROOK':
-                    if currency >= 50:
-                        gridMatrix[row][column] = 1
-                        selected = ''
-                        currency -= 50
-                        sand_rook = Sand(2, posx, posy)
-                        rooks.add(sand_rook)
-                if selected == 'ROCKROOK':
-                    if currency >= 100:
-                        gridMatrix[row][column] = 2
-                        selected = ''
-                        currency -= 100
-                        rock_rook = Rock(2, posx, posy)
-                        rooks.add(rock_rook)
-                if selected == 'FIREROOK':
-                    if currency >= 150:
-                        gridMatrix[row][column] = 3
-                        selected = ''
-                        currency -= 150
-                        fire_rook = Fire(2, posx, posy)
-                        rooks.add(fire_rook)
-                if selected == 'WATERROOK':
-                    if currency >= 150:
-                        gridMatrix[row][column] = 4
-                        selected = ''
-                        currency -= 150
-                        water_rook = Water(2, posx, posy)
-                        rooks.add(water_rook)
+                if row >= 2:
+                    if selected == 'SANDROOK':
+                        if currency >= 50:
+                            gridMatrix[row][column] = 1
+                            selected = ''
+                            currency -= 50
+                            sandrooks.add(Sand(2, posx, posy))
+                            rooks.add(sandrooks)
+                    if selected == 'ROCKROOK':
+                        if currency >= 100:
+                            gridMatrix[row][column] = 2
+                            selected = ''
+                            currency -= 100
+                            rockrooks.add(Rock(2, posx, posy))
+                            rooks.add(rockrooks)
+                    if selected == 'FIREROOK':
+                        if currency >= 150:
+                            gridMatrix[row][column] = 3
+                            selected = ''
+                            currency -= 150
+                            firerooks.add(Fire(2, posx, posy))
+                            rooks.add(firerooks)
+                    if selected == 'WATERROOK':
+                        if currency >= 150:
+                            gridMatrix[row][column] = 4
+                            selected = ''
+                            currency -= 150
+                            waterrooks.add(Water(2, posx, posy))
+                            rooks.add(waterrooks)
             if selected == 'REMOVE' and gridMatrix[row][column] != 0:
                 gridMatrix[row][column] = 0
                 selected = ''
                 pygame.sprite.spritecollide(cursor_rect, rooks, True)
 
+def damage_rooks():
+    global health_fireRook, health_waterRook, group
+    if pygame.sprite.groupcollide(sandrooks, arrows, False, True):
+        for sand_rook in sandrooks:
+            sand_rook.decrease_health(2)
+            if sand_rook.health <= 0:
+                sand_rook.kill()
+    if pygame.sprite.groupcollide(rockrooks, arrows, False, True):
+        for rock_rook in rockrooks:
+            rock_rook.decrease_health(2)
+            if rock_rook.health <= 0:
+                rock_rook.kill()
+    if pygame.sprite.groupcollide(firerooks, arrows, False, True):
+        for fire_rook in firerooks:
+            fire_rook.decrease_health(2)
+            if fire_rook.health <= 0:
+                fire_rook.kill()
+    if pygame.sprite.groupcollide(waterrooks, arrows, False, True):
+        for water_rook in waterrooks:
+            water_rook.decrease_health(2)
+            if water_rook.health <= 0:
+                water_rook.kill()
 
 
-def draw_grid(column, row):
+def draw_grid(column, row, screen):
     global contador
     x, y = 295, 209
     img_square = pygame.image.load("images/square.png")
@@ -183,19 +218,27 @@ def draw_grid(column, row):
     if row == 9:
         return
     if column == 5:
-        return draw_grid(0, row + 1)
+        return draw_grid(0, row + 1, screen)
     else:
         button = Button(img_square, img_squareSelect, x + (column * 95), y + (row * 80), 95, 80)
-        button_matrix(x + (column * 95), y + (row * 80), column, row, button)
+        button_matrix(x + (column * 95), y + (row * 80), column, row, button, screen)
+        damage_rooks(screen, (x + 2) + (column * 95), (y + 2) + (row * 80))
         if contador < 45:
             buttons_grid.add(button)
             buttons.add(buttons_grid)
             contador += 1
-        return draw_grid(column + 1, row)
+        return draw_grid(column + 1, row, screen)
 
 def principal_window():
+<<<<<<< HEAD
     global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level
+    #Place an icon on the window
+    icon = pygame.image.load("rsc/logo_game.png")
+    pygame.display.set_icon(icon)
+=======
+    global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, group
 
+>>>>>>> 28310ca3532edeba22f569bedc6e114c8f38eeb5
     pygame.mixer.init()
     pygame.init()
     width , height = 1000, 1000
@@ -339,9 +382,13 @@ def principal_window():
         avatars.update(screen, gridMatrix)
         arrows.update(screen)
         swords.update(screen)
+        sand_attacks.update(screen)
+        rock_attacks.update(screen)
+        fire_attacks.update(screen)
+        water_attacks.update(screen)
         all_sprites.update(screen)
 
-        draw_grid(0, 0)
+        draw_grid(0, 0, screen)
         crystal_spawn()
         avatar_spawn()
         pygame.display.update()

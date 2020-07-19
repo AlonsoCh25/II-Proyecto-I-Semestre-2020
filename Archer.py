@@ -32,7 +32,7 @@ class Archer(pygame.sprite.Sprite):
             self.image = pygame.image.load('images/avatars/archer2.png')
             self.image = pygame.transform.scale(self.image, (95, 80))
             self.change_counter += 1
-            self.song.play()
+            #self.song.play()
             if self.change_counter >= change_pos:
                 arrow = Arrow(self.rect.centerx, self.rect.bottom)
                 arrows.add(arrow)

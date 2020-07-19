@@ -429,11 +429,18 @@ def scoreboard_window():
     matrix_csv = archive_csv.get_matrix()
 
     txt = ""
+    for l in matrix_csv:
+        if str(l[2]) == "Winner":
+            txt += "\n"
+            txt += str(l[0])
+            txt += str(l[1])
+            
+    """
     for line in matrix_csv:
         txt += "\n"
         txt += "\n"
         for t in line:
-            txt += str(t)
+            txt += str(t)"""
             
     #Images of the screen
     background = pygame.image.load("rsc/window_scoreboard.png")
@@ -474,7 +481,9 @@ def scoreboard_window():
 def transition_login(user):
     csv_scoreboard = csv_class("ScoreBoard.csv","rt")
     matrix = csv_scoreboard.get_matrix()
-    
+    matrix_v = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+    level = 0
+    avatars = 0
     initial_scoreboard = " 0 "
     found = False
     global row
@@ -489,12 +498,12 @@ def transition_login(user):
             else:
                 row += 1
         if not found:     
-            matrix.append((user, initial_scoreboard))
+            matrix.append([user, initial_scoreboard, "Winner", matrix_v, level, avatars])
             csv_scoreboard.write(matrix)
             csv_scoreboard.update_matrix("ScoreBoard.csv","w")
             principal_window()
     else:
-        matrix.append([user, initial_scoreboard])
+        matrix.append([user, initial_scoreboard, "Winner", matrix_v, level, avatars])
         csv_scoreboard.write(matrix)
         csv_scoreboard.update_matrix("ScoreBoard.csv","w")
         principal_window()

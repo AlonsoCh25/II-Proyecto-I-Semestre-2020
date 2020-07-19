@@ -450,7 +450,7 @@ def scoreboard_window():
     scoreboard_screen.blit(pygame.transform.scale(background,(weight, height)),(0,0))
     
     #Call the functions of the multi_line_reader
-    multi_line_reader(scoreboard_screen, txt, -(405),200, font,(255,255,255), justification="center")
+    multi_line_reader(scoreboard_screen, txt, -(410),200, font,(255,255,255), justification="center")
     img_return=pygame.image.load("rsc/btn_return.png")
     cursor = Cursor()
     bt_return =Button(img_return,img_return,(weight-bt_weight-10),(height-100),bt_weight,bt_heigth)

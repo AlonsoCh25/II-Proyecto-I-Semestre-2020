@@ -579,7 +579,7 @@ def principal_window():
                 matrix[row_M][4] = level
                 matrix[row_M][5] = avatars_killed
                 matrix[row_M][7] = minute
-                matrix[row_M][8] = second
+                matrix[row_M][8] = round(second)
                 print(gridMatrix)
                 matrix[row_M][3] = gridMatrix
                 csv_scoreboard.write(matrix)
@@ -1121,7 +1121,12 @@ def scoreboard_window():
         if str(l[2]) == "winner":
             txt += "\n"
             txt += str(l[0])
-            txt += str(l[1])
+            txt += " "
+            txt += str(l[7])
+            txt += ":"
+            txt += str(l[8])
+            txt += "\n"
+            
             
             
     #Images of the screen

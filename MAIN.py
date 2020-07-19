@@ -156,7 +156,7 @@ def next_level():
             contador_3 = 0
             contador_avatars = 0
             pygame.mixer_music.load('Sounds/Battle2.mp3')
-            pygame.mixer.music.play()
+            pygame.mixer.music.play(-1)
             gridMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0],
                           [0, 0, 0, 0, 0],
                           [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
@@ -181,7 +181,7 @@ def next_level():
             contador_3 = 0
             contador_avatars = 0
             pygame.mixer_music.load('Sounds/Battle3.mp3')
-            pygame.mixer.music.play()
+            pygame.mixer.music.play(-1)
             gridMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0],
                           [0, 0, 0, 0, 0],
                           [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
@@ -281,7 +281,7 @@ def avatar_functions():
         for allrooks in rooks:
             if (lumber.rect.top + 100) >= allrooks.rect.top and lumber.rect.left == allrooks.rect.left:
                 lumbermove = False
-                lumber.attack()
+                lumber.attack(True)
         if pygame.sprite.spritecollide(lumber, sand_attacks, True):
             lumber.decrease_health(2)
         elif pygame.sprite.spritecollide(lumber, rock_attacks, True):
@@ -301,7 +301,7 @@ def avatar_functions():
         for allrooks in rooks:
             if (cannibal.rect.top + 100) >= allrooks.rect.top and cannibal.rect.left == allrooks.rect.left:
                 cannibalmove = False
-                cannibal.attack()
+                cannibal.attack(True)
         if pygame.sprite.spritecollide(cannibal, sand_attacks, True):
             cannibal.decrease_health(2)
         elif pygame.sprite.spritecollide(cannibal, rock_attacks, True):
@@ -416,7 +416,7 @@ def damage_rooks():
         elif pygame.sprite.groupcollide(sandrooks, hammers, False, True):
                 sand_rook.decrease_health(12)
         if sand_rook.health <= 0:
-            gridMatrix[int((sand_rook.rect.left - 295) / 95)][(int(sand_rook.rect.top - 209) / 80)] = 0
+            gridMatrix[int((sand_rook.rect.top - 209) / 80)][int((sand_rook.rect.left - 295) / 95)] = 0
             sand_rook.kill()
 
     for rock_rook in rockrooks:
@@ -429,7 +429,7 @@ def damage_rooks():
         elif pygame.sprite.groupcollide(rockrooks, hammers, False, True):
                 rock_rook.decrease_health(12)
         if rock_rook.health <= 0:
-            gridMatrix[int((rock_rook.rect.left - 295) / 95)][int((rock_rook.rect.top - 209) / 80)] = 0
+            gridMatrix[int((rock_rook.rect.top - 295) / 95)][int((rock_rook.rect.left - 209) / 80)] = 0
             rock_rook.kill()
 
     for fire_rook in firerooks:
@@ -442,7 +442,7 @@ def damage_rooks():
         elif pygame.sprite.groupcollide(firerooks, hammers, False, True):
             fire_rook.decrease_health(12)
         if fire_rook.health <= 0:
-            gridMatrix[int((fire_rook.rect.left - 295) / 95)][int((fire_rook.rect.top - 209) / 80)] = 0
+            gridMatrix[int((fire_rook.rect.top - 295) / 95)][int((fire_rook.rect.left - 209) / 80)] = 0
             fire_rook.kill()
 
     for water_rook in waterrooks:
@@ -455,7 +455,7 @@ def damage_rooks():
         elif pygame.sprite.groupcollide(waterrooks, hammers, False, True):
             water_rook.decrease_health(12)
         if water_rook.health <= 0:
-            gridMatrix[int((water_rook.rect.left - 295) / 95)][int((water_rook.rect.top - 209) / 80)] = 0
+            gridMatrix[int((water_rook.rect.top - 295) / 95)][int((water_rook.rect.left - 209) / 80)] = 0
             water_rook.kill()
 
 
@@ -567,7 +567,7 @@ def principal_window():
 
     #Set music
     pygame.mixer_music.load('Sounds/Battle1.mp3')
-    #pygame.mixer.music.play()
+    #pygame.mixer.music.play(-1)
 
     #While loop
     exit = False
@@ -576,8 +576,6 @@ def principal_window():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                #Set matrix
-                gridMatrix = [list_init[5*i : 5*(i+1)] for i in range(9)]
 
                 #Set currency
                 matrix[row_M][6] = currency  
@@ -602,6 +600,8 @@ def principal_window():
                     selected = 'WATERROOK'
                 if cursor.colliderect(bt_remove.rect):
                     selected = 'REMOVE'
+
+        print(gridMatrix)
 
         clock.tick(FPS)
 

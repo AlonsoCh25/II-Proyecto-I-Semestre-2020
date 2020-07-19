@@ -18,8 +18,8 @@ class Fire(pygame.sprite.Sprite):
         self.rect.y = y
         self.counter_attack = 0
 
-    def attack(self):
-        pass
+    def decrease_health(self, damage):
+        self.health -= damage
 
     def update(self, superficie):
         self.counter_attack += 1

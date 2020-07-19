@@ -6,20 +6,20 @@ FPS = 30
 """__________________________________________________________________________________"""
 
 class Sand(pygame.sprite.Sprite):
-    def __init__(self, attack_time, x, y, health):
+    def __init__(self, attack_time, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('images/rooks/sand_rook_a.png')
         self.image = pygame.transform.scale(self.image, (95,80))
         self.rect = self.image.get_rect()
         self.attack_time = attack_time
-        self.health = health
+        self.health = 12
         self.damage = 2
         self.rect.left = x
         self.rect.top = y
         self.counter_attack = 0
 
-    def decrease_damage(self, s):
-        self.health -= s
+    def decrease_health(self, damage):
+        self.health -= damage
 
     def update(self, superficie):
         self.counter_attack += 1

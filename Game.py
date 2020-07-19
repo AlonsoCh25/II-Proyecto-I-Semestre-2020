@@ -40,9 +40,7 @@ matrix = csv_scoreboard.get_matrix()
 #Set matrix
 gridMatrix = matrix[row_M][3]
 a = str.split(gridMatrix)
-print(a)
-print(gridMatrix)
-print(type(gridMatrix))
+
 #Set selected
 selected = ''
 

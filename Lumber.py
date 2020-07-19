@@ -58,23 +58,24 @@ class Lumberjack(pygame.sprite.Sprite):
         elif self.health <= 0:
             self.health_bar = self.health_bar0
 
-    def attack(self):
+    def attack(self, attacks):
 
-        self.counter_attack += 1
+        if attacks == True:
+            self.counter_attack += 1
 
-        if self.counter_attack >= self.attack_time * FPS:
-            self.image = pygame.image.load('images/avatars/lumberjack2.png')
-            self.image = pygame.transform.scale(self.image, (95, 80))
-            self.change_pos = 10
-            self.counter_pos += 1
-            #self.song.play()
-            if self.counter_pos >= self.change_pos:
-                stick = Stick(self.rect.centerx, self.rect.bottom)
-                sticks.add(stick)
-                self.image = pygame.image.load('images/avatars/lumberjack1.png')
+            if self.counter_attack >= self.attack_time * FPS:
+                self.image = pygame.image.load('images/avatars/lumberjack2.png')
                 self.image = pygame.transform.scale(self.image, (95, 80))
-                self.counter_pos = 0
-                self.counter_attack = 0
+                self.change_pos = 10
+                self.counter_pos += 1
+                #self.song.play()
+                if self.counter_pos >= self.change_pos:
+                    stick = Stick(self.rect.centerx, self.rect.bottom)
+                    sticks.add(stick)
+                    self.image = pygame.image.load('images/avatars/lumberjack1.png')
+                    self.image = pygame.transform.scale(self.image, (95, 80))
+                    self.counter_pos = 0
+                    self.counter_attack = 0
 
     def update(self, superficie):
         superficie.blit(self.image, self.rect)

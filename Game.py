@@ -28,7 +28,7 @@ cannibalavatars = pygame.sprite.Group()
 rooks = pygame.sprite.Group()
 avatars = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
-
+print("LEI ESTo")
 global row_M
 row_M = 0
 #Set cursor
@@ -39,7 +39,7 @@ matrix = csv_scoreboard.get_matrix()
 
 #Set matrix
 gridMatrix = matrix[row_M][3]
-a = str.split(gridMatrix)
+print(gridMatrix)
 
 #Set selected
 selected = ''
@@ -471,7 +471,7 @@ def principal_window():
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Game Window")
 
-
+    print(row_M, "In Game")
     #Set clock
     clock = pygame.time.Clock()
 
@@ -480,7 +480,14 @@ def principal_window():
 
     #Matrix
     matrix = csv_scoreboard.get_matrix()
+    gridMatrix = matrix[row_M][3]
 
+    #Set currency
+    currency = matrix[row_M][6]
+
+    level = matrix[row_M][4]
+
+    avatars_killed = matrix[row_M][5]
     #Set font
     font = pygame.font.Font("triforce.ttf", 40)
 
@@ -570,8 +577,10 @@ def principal_window():
         avatars_killed_text = font.render(str(avatars_killed), True, (255,255,255))
 
         #User
+        print(row_M)
         user_t = matrix[row_M][0]
         user = font.render(user_t, True, (255, 255, 255))
+        
         #Combinar login con esto para que el user sea el que hizo el login
 
         #Currency

@@ -19,6 +19,10 @@ def principal_window():
     
     #Contain the parameter of attack frequency
     global parameter
+
+    #Place an icon on the window
+    icon = pygame.image.load("rsc/logo_game.png")
+    pygame.display.set_icon(icon)
     
     #Settings of the screen
     pygame.init()
@@ -138,14 +142,12 @@ def principal_window():
                     pygame.quit()
                     scoreboard_window()
                     break
-
-
-
-        
-
     pygame.quit()
 
 def credits_window():
+	#Place an icon on the window
+    icon = pygame.image.load("rsc/logo_game.png")
+    pygame.display.set_icon(icon)
     #Settings of the screen
     pygame.init()
     pygame.font.init
@@ -208,6 +210,8 @@ def credits_window():
 def login_window():
     #import pygame_textinput
     #Settings of the screen
+    icon = pygame.image.load("rsc/logo_game.png")
+    pygame.display.set_icon(icon)
     pygame.init()
     pygame.font.init
     weight, height = 500,400
@@ -351,6 +355,8 @@ def login_window():
 def help_window():
     #Settings of the screen
     pygame.init()
+    icon = pygame.image.load("rsc/logo_game.png")
+    pygame.display.set_icon(icon)
     pygame.font.init
     weight, height = 1050,768
     bt_weight,bt_heigth = 70,70
@@ -404,6 +410,8 @@ def help_window():
     pygame.quit()
 def scoreboard_window():
     #Settings of the screen
+    icon = pygame.image.load("rsc/logo_game.png")
+    pygame.display.set_icon(icon)
     pygame.init()
     pygame.font.init
     weight, height = 1050,768

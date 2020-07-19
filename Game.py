@@ -230,8 +230,15 @@ def draw_grid(column, row, screen):
         return draw_grid(column + 1, row, screen)
 
 def principal_window():
+<<<<<<< HEAD
+    global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level
+    #Place an icon on the window
+    icon = pygame.image.load("rsc/logo_game.png")
+    pygame.display.set_icon(icon)
+=======
     global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, group
 
+>>>>>>> 28310ca3532edeba22f569bedc6e114c8f38eeb5
     pygame.mixer.init()
     pygame.init()
     width , height = 1000, 1000

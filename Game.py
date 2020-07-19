@@ -31,8 +31,12 @@ all_sprites = pygame.sprite.Group()
 print("LEI ESTo")
 global row_M
 row_M = 0
+global parameter
+parameter = 0
+
 #Set cursor
 cursor = Cursor()
+
 #Load the csv
 csv_scoreboard = csv_class("ScoreBoard.csv","rt")
 matrix = csv_scoreboard.get_matrix()
@@ -65,6 +69,9 @@ level = matrix[row_M][4]
 
 #Set column, row of grid
 group = 0
+
+#Set attack speed
+attack_speed = parameter
 
 #Set avatars spawn timer
 avatar_spawnTime = 4
@@ -339,7 +346,7 @@ def crystal_spawn():
 
 
 def button_matrix(posx, posy, column, row, button, screen):
-    global selected, currency, rooks, all_sprites, sand_rook
+    global selected, currency, rooks, all_sprites, sand_rook, attack_speed
 
     click = pygame.mouse.get_pressed()
     img_square = pygame.image.load("images/square.png")
@@ -355,28 +362,28 @@ def button_matrix(posx, posy, column, row, button, screen):
                             gridMatrix[row][column] = 1
                             selected = ''
                             currency -= 50
-                            sandrooks.add(Sand(2, posx, posy))
+                            sandrooks.add(Sand(attack_speed, posx, posy))
                             rooks.add(sandrooks)
                     if selected == 'ROCKROOK':
                         if currency >= 100:
                             gridMatrix[row][column] = 2
                             selected = ''
                             currency -= 100
-                            rockrooks.add(Rock(2, posx, posy))
+                            rockrooks.add(Rock(attack_speed, posx, posy))
                             rooks.add(rockrooks)
                     if selected == 'FIREROOK':
                         if currency >= 150:
                             gridMatrix[row][column] = 3
                             selected = ''
                             currency -= 150
-                            firerooks.add(Fire(2, posx, posy))
+                            firerooks.add(Fire(attack_speed, posx, posy))
                             rooks.add(firerooks)
                     if selected == 'WATERROOK':
                         if currency >= 150:
                             gridMatrix[row][column] = 4
                             selected = ''
                             currency -= 150
-                            waterrooks.add(Water(2, posx, posy))
+                            waterrooks.add(Water(attack_speed, posx, posy))
                             rooks.add(waterrooks)
             if selected == 'REMOVE' and gridMatrix[row][column] != 0:
                 gridMatrix[row][column] = 0

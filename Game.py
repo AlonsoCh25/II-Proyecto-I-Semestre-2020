@@ -1,5 +1,6 @@
 import pygame
 import random
+#import playsound
 from CLASSES import *
 from Sand import sand_attacks, Sand, SandAttack
 from Rock import rock_attacks, Rock, RockAttack
@@ -9,7 +10,7 @@ from Archer import arrows, Archer, Arrow
 from Squire import axes, Squire, Sword
 from Lumber import sticks, Lumberjack, Stick
 from Cannibal import hammers, Cannibal, Hammer
-
+from MAIN import *
 #Set sprite groups
 buttons = pygame.sprite.Group()
 buttons_grid = pygame.sprite.Group()
@@ -28,12 +29,17 @@ rooks = pygame.sprite.Group()
 avatars = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 
+global row_M
+row_M = 0
 #Set cursor
 cursor = Cursor()
+#Load the csv
+csv_scoreboard = csv_class("ScoreBoard.csv","rt")
+matrix = csv_scoreboard.get_matrix()
 
 #Set matrix
-gridMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0],
-              [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
+gridMatrix = matrix[row_M][3]
+a = str.split(gridMatrix)
 
 #Set selected
 selected = ''
@@ -44,7 +50,7 @@ contador_2 = 0
 contador_3 = 0
 
 #Set currency
-currency = 900
+currency = matrix[row_M][6]
 
 #Set FPS
 FPS = 30
@@ -55,10 +61,7 @@ img_crystal50 = pygame.image.load('images/50_crystal.png')
 img_crystal100 = pygame.image.load('images/100_crystal.png')
 
 #Set level
-level = 1
-
-#Set attack speed
-attack_speed = 4
+level = matrix[row_M][4]
 
 #Set column, row of grid
 group = 0
@@ -79,9 +82,8 @@ if level == 2:
 if level == 3:
     max_avatars = 15 + int(15 * 0.6)
 
-avatars_killed = 0
-avatars_left = max_avatars - avatars_killed
-
+avatars_left = max_avatars
+avatars_killed = matrix[row_M][5]
 
 # Set background
 background = pygame.image.load("images/background_1.png")
@@ -95,15 +97,13 @@ elif level == 3:
 # Set new level variables
 new_level = False
 new_avatars = True
-winner = 'loser'
+winner = matrix[row_M][2]
 
 #Set move variables
 archermove = True
 squiremove = True
 lumbermove = True
 cannibalmove = True
-lumberattack = False
-cannibalattack = False
 
 
 def next_level():
@@ -219,15 +219,12 @@ def avatar_spawn():
 
 
 def avatar_functions():
-    global archermove, squiremove, lumbermove, cannibalmove, lumberattack, cannibalattack, currency, avatars_left, avatars_killed
+    global archermove, squiremove, lumbermove, cannibalmove, currency, avatars_left, avatars_killed
     for archer in archeravatars:
         archer.move(archermove)
         for allrooks in rooks:
             if (archer.rect.top + 100) >= allrooks.rect.top and archer.rect.left == allrooks.rect.left:
                 archermove = False
-            else:
-                archermove = True
-                
         if pygame.sprite.spritecollide(archer, sand_attacks, True):
             archer.decrease_health(2)
         elif pygame.sprite.spritecollide(archer, rock_attacks, True):
@@ -247,8 +244,6 @@ def avatar_functions():
         for allrooks in rooks:
             if (squire.rect.top + 100) >= allrooks.rect.top and squire.rect.left == allrooks.rect.left:
                 squiremove = False
-            else:
-                squiremove = True
         if pygame.sprite.spritecollide(squire, sand_attacks, True):
             squire.decrease_health(2)
         elif pygame.sprite.spritecollide(squire, rock_attacks, True):
@@ -265,15 +260,10 @@ def avatar_functions():
 
     for lumber in lumberavatars:
         lumber.move(lumbermove)
-        lumber.attack(lumberattack)
         for allrooks in rooks:
             if (lumber.rect.top + 100) >= allrooks.rect.top and lumber.rect.left == allrooks.rect.left:
                 lumbermove = False
-                lumberattack = True
-            else:
-                lumbermove = True
-                lumberattack = False
-
+                lumber.attack()
         if pygame.sprite.spritecollide(lumber, sand_attacks, True):
             lumber.decrease_health(2)
         elif pygame.sprite.spritecollide(lumber, rock_attacks, True):
@@ -290,14 +280,10 @@ def avatar_functions():
 
     for cannibal in cannibalavatars:
         cannibal.move(cannibalmove)
-        cannibal.attack(cannibalattack)
         for allrooks in rooks:
             if (cannibal.rect.top + 100) >= allrooks.rect.top and cannibal.rect.left == allrooks.rect.left:
                 cannibalmove = False
-                cannibalattack = True
-            else:
-                cannibalmove = True
-                cannibalattack = False
+                cannibal.attack()
         if pygame.sprite.spritecollide(cannibal, sand_attacks, True):
             cannibal.decrease_health(2)
         elif pygame.sprite.spritecollide(cannibal, rock_attacks, True):
@@ -353,7 +339,7 @@ def crystal_spawn():
 
 
 def button_matrix(posx, posy, column, row, button, screen):
-    global selected, currency, rooks, all_sprites, attack_speed
+    global selected, currency, rooks, all_sprites, sand_rook
 
     click = pygame.mouse.get_pressed()
     img_square = pygame.image.load("images/square.png")
@@ -369,28 +355,28 @@ def button_matrix(posx, posy, column, row, button, screen):
                             gridMatrix[row][column] = 1
                             selected = ''
                             currency -= 50
-                            sandrooks.add(Sand(attack_speed, posx, posy))
+                            sandrooks.add(Sand(2, posx, posy))
                             rooks.add(sandrooks)
                     if selected == 'ROCKROOK':
                         if currency >= 100:
                             gridMatrix[row][column] = 2
                             selected = ''
                             currency -= 100
-                            rockrooks.add(Rock(attack_speed, posx, posy))
+                            rockrooks.add(Rock(2, posx, posy))
                             rooks.add(rockrooks)
                     if selected == 'FIREROOK':
                         if currency >= 150:
                             gridMatrix[row][column] = 3
                             selected = ''
                             currency -= 150
-                            firerooks.add(Fire(attack_speed, posx, posy))
+                            firerooks.add(Fire(2, posx, posy))
                             rooks.add(firerooks)
                     if selected == 'WATERROOK':
                         if currency >= 150:
                             gridMatrix[row][column] = 4
                             selected = ''
                             currency -= 150
-                            waterrooks.add(Water(attack_speed, posx, posy))
+                            waterrooks.add(Water(2, posx, posy))
                             rooks.add(waterrooks)
             if selected == 'REMOVE' and gridMatrix[row][column] != 0:
                 gridMatrix[row][column] = 0
@@ -399,7 +385,7 @@ def button_matrix(posx, posy, column, row, button, screen):
 
 
 def damage_rooks():
-    global health_fireRook, health_waterRook, group, gridMatrix
+    global health_fireRook, health_waterRook, group
 
     for sand_rook in sandrooks:
         if pygame.sprite.groupcollide(sandrooks, arrows, False, True):
@@ -412,8 +398,9 @@ def damage_rooks():
         elif pygame.sprite.groupcollide(sandrooks, hammers, False, True):
                 sand_rook.decrease_health(12)
         if sand_rook.health <= 0:
-            gridMatrix[int((sand_rook.rect.top - 209)/80)][int((sand_rook.rect.left - 295)/95)] = 0
+            #gridMatrix[()]
             sand_rook.kill()
+
 
     for rock_rook in rockrooks:
         if pygame.sprite.groupcollide(rockrooks, arrows, False, True):
@@ -425,7 +412,6 @@ def damage_rooks():
         elif pygame.sprite.groupcollide(rockrooks, hammers, False, True):
                 rock_rook.decrease_health(12)
         if rock_rook.health <= 0:
-            gridMatrix[int((rock_rook.rect.top - 209) / 80)][int((rock_rook.rect.left - 295) / 95)] = 0
             rock_rook.kill()
 
     for fire_rook in firerooks:
@@ -438,7 +424,6 @@ def damage_rooks():
         elif pygame.sprite.groupcollide(firerooks, hammers, False, True):
             fire_rook.decrease_health(12)
         if fire_rook.health <= 0:
-            gridMatrix[int((fire_rook.rect.top - 209) / 80)][int((fire_rook.rect.left - 295) / 95)] = 0
             fire_rook.kill()
 
     for water_rook in waterrooks:
@@ -451,7 +436,6 @@ def damage_rooks():
         elif pygame.sprite.groupcollide(waterrooks, hammers, False, True):
             water_rook.decrease_health(12)
         if water_rook.health <= 0:
-            gridMatrix[int((water_rook.rect.top - 209) / 80)][int((water_rook.rect.left - 295) / 95)] = 0
             water_rook.kill()
 
 
@@ -586,7 +570,8 @@ def principal_window():
         avatars_killed_text = font.render(str(avatars_killed), True, (255,255,255))
 
         #User
-        user = font.render('PEPITO', True, (255, 255, 255))
+        user_t = matrix[row_M][0]
+        user = font.render(user_t, True, (255, 255, 255))
         #Combinar login con esto para que el user sea el que hizo el login
 
         #Currency
@@ -642,5 +627,3 @@ def principal_window():
         pygame.display.update()
 
     pygame.quit()
-
-principal_window()

@@ -11,11 +11,12 @@
 
 from CLASSES import *
 from pygame import *
+from Game import *
 
 """Functions"""
-def principal_window():
+def main_window():
     #Contains the row of the matrix the user is in
-    global row
+    global row_M
     
     #Contain the parameter of attack frequency
     global parameter
@@ -42,8 +43,8 @@ def principal_window():
     font_user = pygame.font.Font("triforce.ttf",40)
 
     #Text
-    user_text = matrix[row][0] 
-    scoreboard_text = "ScoreBoard:" +" "+ matrix[row][1]
+    user_text = matrix[row_M][0] 
+    scoreboard_text = "ScoreBoard:" +" "+ matrix[row_M][1]
     
     #Render
     txt_user = font_user.render(user_text, True, (255,255,255))
@@ -140,6 +141,10 @@ def principal_window():
                     break
                 if cursor.colliderect(bt_play.rect):
                     print("Push Play")
+                    exit_ = True
+                    pygame.quit()
+                    principal_window()
+                    break
                 if cursor.colliderect(bt_scoreboard.rect):
                     print("Push Scoreboard")
                     exit_ = True
@@ -208,7 +213,7 @@ def credits_window():
                     print("Push Return Menu")
                     exit_ = True
                     pygame.quit()
-                    principal_window()
+                    main_window()
                     break
                 
         
@@ -416,7 +421,7 @@ def help_window():
                     print("Push Return Menu")
                     exit_ = True
                     pygame.quit()
-                    principal_window()
+                    main_window()
                     break
     pygame.quit()
     
@@ -443,7 +448,7 @@ def scoreboard_window():
     #Load the user and score as a text, only when the user is the winner.
     txt = ""
     for l in matrix_csv:
-        if str(l[2]) == "Winner":
+        if str(l[2]) == "winner":
             txt += "\n"
             txt += str(l[0])
             txt += str(l[1])
@@ -480,7 +485,7 @@ def scoreboard_window():
                     exit_ = True
                     print("Push Return Menu")
                     pygame.quit()
-                    principal_window()
+                    main_window()
                     break
                     
     pygame.quit()
@@ -492,12 +497,13 @@ def transition_login(user):
     #Set the matrix empty
     matrix_v = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
     #Set the initial level,avatars and score.
-    level = 0
-    avatars = 0
+    level = 1
+    currency = 150
+    avatars_killed = 0
     initial_scoreboard = " 0 "
     found = False
-    global row
-    row = 0
+    global row_M
+    row_M = 0
     #If the matrix is not empty, search the user
     if matrix != []:
         for usr in matrix:
@@ -505,21 +511,21 @@ def transition_login(user):
                 found = True
                 csv_scoreboard.write(matrix)
                 csv_scoreboard.update_matrix("ScoreBoard.csv","w")
-                principal_window()
+                main_window()
             else:
-                row += 1
+                row_M += 1
         #If the user is not found, creat a new user.
         if not found:     
-            matrix.append([user, initial_scoreboard, "Loser", matrix_v, level, avatars])
+            matrix.append([user, initial_scoreboard, "loser", matrix_v, level, avatars_killed,currency])
             csv_scoreboard.write(matrix)
             csv_scoreboard.update_matrix("ScoreBoard.csv","w")
-            principal_window()
+            main_window()
     #Whe the matrix is empty, add the user
     else:
-        matrix.append([user, initial_scoreboard, "Loser", matrix_v, level, avatars])
+        matrix.append([user, initial_scoreboard, "loser", matrix_v, level, avatars_killed,currency])
         csv_scoreboard.write(matrix)
         csv_scoreboard.update_matrix("ScoreBoard.csv","w")
-        principal_window()
+        main_window()
 
 def multi_line_reader(screen, txt, x,y, font,colour=(128,128,128), justification="left"):
     def update():

@@ -41,13 +41,16 @@ rooks = pygame.sprite.Group()
 avatars = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 row_M = 0
+
 #Set cursor
 cursor = Cursor()
+
 #Load the csv
 csv_scoreboard = csv_class("ScoreBoard.csv","rt")
 matrix = csv_scoreboard.get_matrix()
 
 list_init = []
+
 #Load the list of matrix
 for line in matrix[row_M][3]:
     if line != "[" and line != "]" and line != "," and line != "[]" and line != " ":
@@ -106,8 +109,6 @@ if level == 2:
     background = pygame.image.load("images/background_2.png")
 elif level == 3:
     background = pygame.image.load("images/background_3.png")
-
-
 
 # Set new level variables
 new_level = False
@@ -198,10 +199,11 @@ def next_level():
         new_level = False
     new_level = False
 
+
 def avatar_spawn():
     global contador_3, contador_avatars, FPS, currency, avatar_spawnTime, spawn_avatars, gridMatrix, new_avatars
-    x, y = 295, 209
 
+    x, y = 295, 209
     if new_avatars == True:
         contador_3 += 1 / FPS
         if avatar_spawnTime <= contador_3 <= avatar_spawnTime + 0.05:
@@ -235,6 +237,7 @@ def avatar_spawn():
 
 def avatar_functions():
     global archermove, squiremove, lumbermove, cannibalmove, currency, avatars_left, avatars_killed
+
     for archer in archeravatars:
         archer.move(archermove)
         for allrooks in rooks:
@@ -315,8 +318,8 @@ def avatar_functions():
 
 
 def crystal_spawn():
-
     global contador_2, currency, FPS, button_25, button_50, button_100
+
     click = pygame.mouse.get_pressed()
     contador_2 += 1 / FPS
     img_square = pygame.image.load("images/square.png")
@@ -416,7 +419,6 @@ def damage_rooks():
             gridMatrix[int((sand_rook.rect.left - 295) / 95)][(int(sand_rook.rect.top - 209) / 80)] = 0
             sand_rook.kill()
 
-
     for rock_rook in rockrooks:
         if pygame.sprite.groupcollide(rockrooks, arrows, False, True):
                 rock_rook.decrease_health(2)
@@ -428,7 +430,6 @@ def damage_rooks():
                 rock_rook.decrease_health(12)
         if rock_rook.health <= 0:
             gridMatrix[int((rock_rook.rect.left - 295) / 95)][int((rock_rook.rect.top - 209) / 80)] = 0
-            print(gridMatrix)
             rock_rook.kill()
 
     for fire_rook in firerooks:
@@ -460,6 +461,7 @@ def damage_rooks():
 
 def draw_grid(column, row, screen):
     global contador
+
     x, y = 295, 209
     img_square = pygame.image.load("images/square.png")
     img_squareSelect = pygame.image.load("images/select_square.png")
@@ -480,6 +482,7 @@ def draw_grid(column, row, screen):
 
 def principal_window():
     global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, avatar_spawnTime, new_level, avatars_left, avatars_killed
+
     #Place an icon on the window
     icon = pygame.image.load("rsc/logo_game.png")
     pygame.display.set_icon(icon)
@@ -498,6 +501,7 @@ def principal_window():
     matrix = csv_scoreboard.get_matrix()
     
     list_init = []
+
     #Load the list of matrix
     for line in matrix[row_M][3]:
         if line != "[" and line != "]" and line != "," and line != "[]" and line != " ":
@@ -512,6 +516,7 @@ def principal_window():
     level = int(matrix[row_M][4])
 
     avatars_killed = int(matrix[row_M][5])
+    
     #Set font
     font = pygame.font.Font("triforce.ttf", 40)
 

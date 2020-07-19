@@ -186,7 +186,7 @@ def button_matrix(posx, posy, column, row, button, screen):
                 selected = ''
                 pygame.sprite.spritecollide(cursor_rect, rooks, True)
 
-def damage_rooks(screen, posx, posy):
+def damage_rooks():
     global health_fireRook, health_waterRook, group
     if pygame.sprite.groupcollide(sandrooks, arrows, False, True):
         for sand_rook in sandrooks:

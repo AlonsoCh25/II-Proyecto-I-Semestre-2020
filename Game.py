@@ -1,6 +1,6 @@
 import pygame
 import random
-import playsound
+#import playsound
 from CLASSES import *
 from Sand import sand_attacks, Sand, SandAttack
 from Rock import rock_attacks, Rock, RockAttack
@@ -10,7 +10,7 @@ from Archer import arrows, Archer, Arrow
 from Squire import axes, Squire, Sword
 from Lumber import sticks, Lumberjack, Stick
 from Cannibal import hammers, Cannibal, Hammer
-
+from MAIN import *
 #Set sprite groups
 buttons = pygame.sprite.Group()
 buttons_grid = pygame.sprite.Group()
@@ -29,13 +29,20 @@ rooks = pygame.sprite.Group()
 avatars = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 
+global row_M
+row_M = 0
 #Set cursor
 cursor = Cursor()
+#Load the csv
+csv_scoreboard = csv_class("ScoreBoard.csv","rt")
+matrix = csv_scoreboard.get_matrix()
 
 #Set matrix
-gridMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0],
-              [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-
+gridMatrix = matrix[row_M][3]
+a = str.split(gridMatrix)
+print(a)
+print(gridMatrix)
+print(type(gridMatrix))
 #Set selected
 selected = ''
 
@@ -45,7 +52,7 @@ contador_2 = 0
 contador_3 = 0
 
 #Set currency
-currency = 900
+currency = matrix[row_M][6]
 
 #Set FPS
 FPS = 30
@@ -56,7 +63,7 @@ img_crystal50 = pygame.image.load('images/50_crystal.png')
 img_crystal100 = pygame.image.load('images/100_crystal.png')
 
 #Set level
-level = 1
+level = matrix[row_M][4]
 
 #Set column, row of grid
 group = 0
@@ -78,7 +85,7 @@ if level == 3:
     max_avatars = 15 + int(15 * 0.6)
 
 avatars_left = max_avatars
-avatars_killed = 0
+avatars_killed = matrix[row_M][5]
 
 # Set background
 background = pygame.image.load("images/background_1.png")
@@ -92,7 +99,7 @@ elif level == 3:
 # Set new level variables
 new_level = False
 new_avatars = True
-winner = 'loser'
+winner = matrix[row_M][2]
 
 #Set move variables
 archermove = True
@@ -565,7 +572,8 @@ def principal_window():
         avatars_killed_text = font.render(str(avatars_killed), True, (255,255,255))
 
         #User
-        user = font.render('PEPITO', True, (255, 255, 255))
+        user_t = matrix[row_M][0]
+        user = font.render(user_t, True, (255, 255, 255))
         #Combinar login con esto para que el user sea el que hizo el login
 
         #Currency
@@ -621,5 +629,3 @@ def principal_window():
         pygame.display.update()
 
     pygame.quit()
-
-principal_window()

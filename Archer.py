@@ -23,7 +23,42 @@ class Archer(pygame.sprite.Sprite):
         self.change_counter = 0
         self.y_pos = 0
 
-    def update(self, superficie, gridMatrix):
+        self.health_bar100 = pygame.image.load('images/health_bar100.png')
+        self.health_bar100 = pygame.transform.scale(self.health_bar100, (90, 30))
+        self.health_bar75 = pygame.image.load('images/health_bar75.png')
+        self.health_bar75 = pygame.transform.scale(self.health_bar75, (90, 30))
+        self.health_bar50 = pygame.image.load('images/health_bar50.png')
+        self.health_bar50 = pygame.transform.scale(self.health_bar50, (90, 30))
+        self.health_bar25 = pygame.image.load('images/health_bar25.png')
+        self.health_bar25 = pygame.transform.scale(self.health_bar25, (90, 30))
+        self.health_bar0 = pygame.image.load('images/health_bar0.png')
+        self.health_bar0 = pygame.transform.scale(self.health_bar0, (90, 30))
+        self.health_bar = self.health_bar100
+        self.rect_health_bar = self.image.get_rect()
+        self.rect_health_bar.left = x + 2
+        self.rect_health_bar.top = y - 10
+
+    def move(self, movement):
+        if movement == True:
+            self.counter_move += 1
+
+            if self.counter_move >= self.movement_time * FPS:
+                self.rect.top += 80
+                self.rect_health_bar.top += 80
+                self.counter_move = 0
+
+    def decrease_health(self, damage):
+        self.health -= damage
+        if 3 <= self.health < 4:
+            self.health_bar = self.health_bar75
+        elif 2 <= self.health < 3:
+            self.health_bar = self.health_bar50
+        elif 0 < self.health < 2:
+            self.health_bar = self.health_bar25
+        elif self.health <= 0:
+            self.health_bar = self.health_bar0
+
+    def update(self, superficie):
 
         self.counter_attack += 1
 
@@ -41,13 +76,8 @@ class Archer(pygame.sprite.Sprite):
                 self.image = pygame.transform.scale(self.image, (95, 80))
                 self.change_counter = 0
 
-        self.counter_move += 1
-
-        if self.counter_move >= self.movement_time * FPS:
-            self.rect.top += 80
-            self.counter_move = 0
-
         superficie.blit(self.image, self.rect)
+        superficie.blit(self.health_bar, self.rect_health_bar)
 
 """__________________________________________________________________________________"""
 

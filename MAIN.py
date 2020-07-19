@@ -1,6 +1,6 @@
 """Avatar vs Rooks"""
 """Members"""
-#Marco Gonzales
+#Marco Gonzales 2020034547
 #Diego Garcia 2020124283
 #Kenneth Castillo 2019062984
 """Libraries"""
@@ -102,12 +102,16 @@ def principal_window():
         pygame.display.update()
         
         for event in pygame.event.get():
+            #Load the events
             if event.type == pygame.QUIT:
+                #Save the CSV 
                 csv_scoreboard.write(matrix)
                 csv_scoreboard.update_matrix("ScoreBoard.csv","w")
+                #Exit
                 exit_ = True
                 pygame.quit()
                 break
+            #Define the actions of the mouse button
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if cursor.colliderect(bt_credits.rect):
                     print("Push credits")
@@ -188,14 +192,17 @@ def credits_window():
         pygame.display.update()
         cursor.update()
 
+        #Set th FPS
         pygame.display.update()
         clock.tick(60)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                #Exit
                 exit_ = True
                 pygame.quit()
                 break
+            #Define the action of the mouse button
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if cursor.colliderect(bt_return.rect):
                     print("Push Return Menu")
@@ -235,6 +242,7 @@ def login_window():
     color_inactive_p = (0,0,0)
     color_active_p = (255,255,255)
     color_p = color_inactive
+    
     #Set the initial active of the box
     active = False
     active_p = False
@@ -309,6 +317,7 @@ def login_window():
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                #Exit
                 exit_ = True
                 pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -319,7 +328,7 @@ def login_window():
                         pygame.quit()
                         transition_login(text)
                         break
-                    
+                ####BOX OF THE TEXT###
                 # when the user click in the box, this is active
                 if box_input.collidepoint(event.pos):
                     # Set the value of the variable
@@ -337,7 +346,9 @@ def login_window():
                     active_p = False
                 #Set the current color of the box for the other box
                 color_p = color_active_p if active_p else color_inactive_p
-                
+
+            #Write text in the box of the screen
+            #Add the text to a variable
             if event.type == pygame.KEYDOWN:
                 if active:
                     if event.key == pygame.K_BACKSPACE:
@@ -374,14 +385,14 @@ def help_window():
     
     #Images of the screen
     background = pygame.image.load("rsc/window_help.png")
-
+    img_return=pygame.image.load("rsc/btn_return.png")
 
     #Background
     help_screen.blit(pygame.transform.scale(background,(weight, height)),(0,0))
     
     #Call the functions of the multi_line_reader
     multi_line_reader(help_screen, txt, 20,190, font,(255,255,255), justification="left-justify")
-    img_return=pygame.image.load("rsc/btn_return.png")
+
     cursor = Cursor()
     bt_return =Button(img_return,img_return,(weight-bt_weight-10),(height-100),bt_weight,bt_heigth)
     pygame.display.update()
@@ -408,6 +419,7 @@ def help_window():
                     principal_window()
                     break
     pygame.quit()
+    
 def scoreboard_window():
     #Settings of the screen
     icon = pygame.image.load("rsc/logo_game.png")
@@ -428,6 +440,7 @@ def scoreboard_window():
     archive_csv = csv_class("ScoreBoard.csv","rt")
     matrix_csv = archive_csv.get_matrix()
 
+    #Load the user and score as a text, only when the user is the winner.
     txt = ""
     for l in matrix_csv:
         if str(l[2]) == "Winner":
@@ -435,12 +448,6 @@ def scoreboard_window():
             txt += str(l[0])
             txt += str(l[1])
             
-    """
-    for line in matrix_csv:
-        txt += "\n"
-        txt += "\n"
-        for t in line:
-            txt += str(t)"""
             
     #Images of the screen
     background = pygame.image.load("rsc/window_scoreboard.png")
@@ -479,15 +486,19 @@ def scoreboard_window():
     pygame.quit()
 
 def transition_login(user):
+    #Load the csv
     csv_scoreboard = csv_class("ScoreBoard.csv","rt")
     matrix = csv_scoreboard.get_matrix()
+    #Set the matrix empty
     matrix_v = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+    #Set the initial level,avatars and score.
     level = 0
     avatars = 0
     initial_scoreboard = " 0 "
     found = False
     global row
     row = 0
+    #If the matrix is not empty, search the user
     if matrix != []:
         for usr in matrix:
             if usr[0] == user:
@@ -497,11 +508,13 @@ def transition_login(user):
                 principal_window()
             else:
                 row += 1
+        #If the user is not found, creat a new user.
         if not found:     
             matrix.append([user, initial_scoreboard, "Loser", matrix_v, level, avatars])
             csv_scoreboard.write(matrix)
             csv_scoreboard.update_matrix("ScoreBoard.csv","w")
             principal_window()
+    #Whe the matrix is empty, add the user
     else:
         matrix.append([user, initial_scoreboard, "Loser", matrix_v, level, avatars])
         csv_scoreboard.write(matrix)

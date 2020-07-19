@@ -7,9 +7,9 @@ from Rock import rock_attacks, Rock, RockAttack
 from Fire import fire_attacks, Fire, FireAttack
 from Water import water_attacks, Water, WaterAttack
 from Archer import arrows, Archer, Arrow
-from Squire import swords, Squire, Sword
-from Lumber import *
-from Cannibal import *
+from Squire import axes, Squire, Sword
+from Lumber import sticks, Lumberjack, Stick
+from Cannibal import hammers, Cannibal, Hammer
 
 #Set sprite groups
 buttons = pygame.sprite.Group()
@@ -43,7 +43,6 @@ selected = ''
 contador = 0
 contador_2 = 0
 contador_3 = 0
-contador_4 = 0
 
 #Set currency
 currency = 900
@@ -59,52 +58,244 @@ img_crystal100 = pygame.image.load('images/100_crystal.png')
 #Set level
 level = 1
 
-#Set background
-if level == 1:
-    background = pygame.image.load("images/background_1.png")
-elif level == 2:
-    background = pygame.image.load("images/background_2.png")
-elif level == 3:
-    background = pygame.image.load("images/background_3.png")
-
 #Set column, row of grid
 group = 0
 
 #Set avatars spawn timer
-if level == 1:
-    avatar_spawnTime = 4
+avatar_spawnTime = 4
 if level == 2:
     avatar_spawnTime = 4 - (4 * 0.3)
 elif level == 3:
     avatar_spawnTime = 4 - (4 * 0.6)
 
+#Set max avatar spawn
+spawn_avatars = True
+contador_avatars = 0
+max_avatars = 15
+if level == 2:
+    max_avatars = 15 + int(15 * 0.3)
+if level == 3:
+    max_avatars = 15 + int(15 * 0.6)
+
+avatars_left = max_avatars
+avatars_killed = 0
+
+# Set background
+background = pygame.image.load("images/background_1.png")
+if level == 2:
+    background = pygame.image.load("images/background_2.png")
+elif level == 3:
+    background = pygame.image.load("images/background_3.png")
+
+
+
+# Set new level variables
+new_level = False
+new_avatars = True
+winner = 'loser'
+
+#Set move variables
+archermove = True
+squiremove = True
+lumbermove = True
+cannibalmove = True
+
+
+def next_level():
+    global level, gridMatrix, max_avatars, avatar_spawnTime, background, new_level, new_avatars, avatars_left, avatars_killed, contador_3, contador_avatars, winner
+
+    if new_level == True:
+        level += 1
+        if level > 3:
+            winner = 'winner'
+            '''background = pygame.image.load('images/winner.png')
+            pygame.mixer_music.stop()
+            pygame.mixer_music.load('Sounds/Winner.mp3')
+            pygame.mixer_music.play()
+            gridMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0],
+                          [0, 0, 0, 0, 0],
+                          [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
+            sand_attacks.empty()
+            rock_attacks.empty()
+            fire_attacks.empty()
+            water_attacks.empty()
+            sandrooks.empty()
+            rockrooks.empty()
+            firerooks.empty()
+            waterrooks.empty()
+            rooks.empty()'''
+
+        if level == 2:
+            pygame.mixer_music.stop()
+            max_avatars = 15 + int(15 * 0.3)
+            avatars_left = max_avatars
+            background = pygame.image.load("images/background_2.png")
+            avatar_spawnTime = 4 - (4 * 0.3)
+            avatars_killed = 0
+            contador_3 = 0
+            contador_avatars = 0
+            pygame.mixer_music.load('Sounds/Battle2.mp3')
+            pygame.mixer.music.play()
+            gridMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0],
+                          [0, 0, 0, 0, 0],
+                          [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
+            new_avatars = True
+            sand_attacks.empty()
+            rock_attacks.empty()
+            fire_attacks.empty()
+            water_attacks.empty()
+            sandrooks.empty()
+            rockrooks.empty()
+            firerooks.empty()
+            waterrooks.empty()
+            rooks.empty()
+
+        elif level == 3:
+            pygame.mixer_music.stop()
+            max_avatars = 15 + int(15 * 0.6)
+            avatars_left = max_avatars
+            background = pygame.image.load("images/background_3.png")
+            avatar_spawnTime = 4 - (4 * 0.6)
+            avatars_killed = 0
+            contador_3 = 0
+            contador_avatars = 0
+            pygame.mixer_music.load('Sounds/Battle3.mp3')
+            pygame.mixer.music.play()
+            gridMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0],
+                          [0, 0, 0, 0, 0],
+                          [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
+            new_avatars = True
+            sand_attacks.empty()
+            rock_attacks.empty()
+            fire_attacks.empty()
+            water_attacks.empty()
+            sandrooks.empty()
+            rockrooks.empty()
+            firerooks.empty()
+            waterrooks.empty()
+            rooks.empty()
+
+        new_level = False
+    new_level = False
 
 def avatar_spawn():
-    global contador_3, FPS, currency, avatar_spawnTime, gridMatrix
+    global contador_3, contador_avatars, FPS, currency, avatar_spawnTime, spawn_avatars, gridMatrix, new_avatars
     x, y = 295, 209
-    contador_3 += 1 / FPS
-    if avatar_spawnTime <= contador_3 <= avatar_spawnTime + 0.04:
-        random_avatar = random.randint(0,3)
-        random_column = random.randint(0,4)
-        random_avatar = 0
-        if random_avatar == 0 and gridMatrix[0][random_column] == 0:
-            archeravatars.add(Archer(x + (random_column * 95), y))
-            avatars.add(archeravatars)
-            contador_3 = 0
-        if random_avatar == 1 and gridMatrix[0][random_column] == 0:
-            squireavatars.add(Squire(x + (random_column * 95), y))
-            avatars.add(squireavatars)
-            contador_3 = 0
-        if random_avatar == 2 and gridMatrix[0][random_column] == 0:
-            lumberavatars.add(Lumberjack(x + (random_column * 95), y))
-            avatars.add(lumberavatars)
-            contador_3 = 0
-        if random_avatar == 3 and gridMatrix[0][random_column] == 0:
-            cannibalavatars.add(Cannibal(x + (random_column * 95), y))
-            avatars.add(cannibalavatars)
-            contador_3 = 0
+
+    if new_avatars == True:
+        contador_3 += 1 / FPS
+        if avatar_spawnTime <= contador_3 <= avatar_spawnTime + 0.05:
+            random_avatar = random.randint(0,3)
+            random_column = random.randint(0,4)
+            if random_avatar == 0 and gridMatrix[0][random_column] == 0:
+                archeravatars.add(Archer(x + (random_column * 95), y))
+                avatars.add(archeravatars)
+                contador_3 = 0
+                contador_avatars += 1
+            elif random_avatar == 1 and gridMatrix[0][random_column] == 0:
+                squireavatars.add(Squire(x + (random_column * 95), y))
+                avatars.add(squireavatars)
+                contador_3 = 0
+                contador_avatars += 1
+            elif random_avatar == 2 and gridMatrix[0][random_column] == 0:
+                lumberavatars.add(Lumberjack(x + (random_column * 95), y))
+                avatars.add(lumberavatars)
+                contador_3 = 0
+                contador_avatars += 1
+            elif random_avatar == 3 and gridMatrix[0][random_column] == 0:
+                cannibalavatars.add(Cannibal(x + (random_column * 95), y))
+                avatars.add(cannibalavatars)
+                contador_3 = 0
+                contador_avatars += 1
+            if contador_avatars == max_avatars:
+                new_avatars = False
+
+    avatar_functions()
+
+
+def avatar_functions():
+    global archermove, squiremove, lumbermove, cannibalmove, currency, avatars_left, avatars_killed
+    for archer in archeravatars:
+        archer.move(archermove)
+        for allrooks in rooks:
+            if (archer.rect.top + 100) >= allrooks.rect.top and archer.rect.left == allrooks.rect.left:
+                archermove = False
+        if pygame.sprite.spritecollide(archer, sand_attacks, True):
+            archer.decrease_health(2)
+        elif pygame.sprite.spritecollide(archer, rock_attacks, True):
+            archer.decrease_health(4)
+        elif pygame.sprite.spritecollide(archer, fire_attacks, True):
+            archer.decrease_health(8)
+        elif pygame.sprite.spritecollide(archer, water_attacks, True):
+            archer.decrease_health(8)
+        if archer.health <= 0:
+            archer.kill()
+            currency += 75
+            avatars_left -= 1
+            avatars_killed += 1
+
+    for squire in squireavatars:
+        squire.move(squiremove)
+        for allrooks in rooks:
+            if (squire.rect.top + 100) >= allrooks.rect.top and squire.rect.left == allrooks.rect.left:
+                squiremove = False
+        if pygame.sprite.spritecollide(squire, sand_attacks, True):
+            squire.decrease_health(2)
+        elif pygame.sprite.spritecollide(squire, rock_attacks, True):
+            squire.decrease_health(4)
+        elif pygame.sprite.spritecollide(squire, fire_attacks, True):
+            squire.decrease_health(8)
+        elif pygame.sprite.spritecollide(squire, water_attacks, True):
+            squire.decrease_health(8)
+        if squire.health <= 0:
+            squire.kill()
+            currency += 75
+            avatars_left -= 1
+            avatars_killed += 1
+
+    for lumber in lumberavatars:
+        lumber.move(lumbermove)
+        for allrooks in rooks:
+            if (lumber.rect.top + 100) >= allrooks.rect.top and lumber.rect.left == allrooks.rect.left:
+                lumbermove = False
+                lumber.attack()
+        if pygame.sprite.spritecollide(lumber, sand_attacks, True):
+            lumber.decrease_health(2)
+        elif pygame.sprite.spritecollide(lumber, rock_attacks, True):
+            lumber.decrease_health(4)
+        elif pygame.sprite.spritecollide(lumber, fire_attacks, True):
+            lumber.decrease_health(8)
+        elif pygame.sprite.spritecollide(lumber, water_attacks, True):
+            lumber.decrease_health(8)
+        if lumber.health <= 0:
+            lumber.kill()
+            currency += 75
+            avatars_left -= 1
+            avatars_killed += 1
+
+    for cannibal in cannibalavatars:
+        cannibal.move(cannibalmove)
+        for allrooks in rooks:
+            if (cannibal.rect.top + 100) >= allrooks.rect.top and cannibal.rect.left == allrooks.rect.left:
+                cannibalmove = False
+                cannibal.attack()
+        if pygame.sprite.spritecollide(cannibal, sand_attacks, True):
+            cannibal.decrease_health(2)
+        elif pygame.sprite.spritecollide(cannibal, rock_attacks, True):
+            cannibal.decrease_health(4)
+        elif pygame.sprite.spritecollide(cannibal, fire_attacks, True):
+            cannibal.decrease_health(8)
+        elif pygame.sprite.spritecollide(cannibal, water_attacks, True):
+            cannibal.decrease_health(8)
+        if cannibal.health <= 0:
+            cannibal.kill()
+            currency += 75
+            avatars_left -= 1
+            avatars_killed += 1
+
 
 def crystal_spawn():
+
     global contador_2, currency, FPS, button_25, button_50, button_100
     click = pygame.mouse.get_pressed()
     contador_2 += 1 / FPS
@@ -140,6 +331,7 @@ def crystal_spawn():
         button_50.empty()
         button_100.empty()
         contador_2 = 0
+
 
 def button_matrix(posx, posy, column, row, button, screen):
     global selected, currency, rooks, all_sprites, sand_rook
@@ -186,28 +378,60 @@ def button_matrix(posx, posy, column, row, button, screen):
                 selected = ''
                 pygame.sprite.spritecollide(cursor_rect, rooks, True)
 
+
 def damage_rooks():
     global health_fireRook, health_waterRook, group
-    if pygame.sprite.groupcollide(sandrooks, arrows, False, True):
-        for sand_rook in sandrooks:
-            sand_rook.decrease_health(2)
-            if sand_rook.health <= 0:
-                sand_rook.kill()
-    if pygame.sprite.groupcollide(rockrooks, arrows, False, True):
-        for rock_rook in rockrooks:
-            rock_rook.decrease_health(2)
-            if rock_rook.health <= 0:
-                rock_rook.kill()
-    if pygame.sprite.groupcollide(firerooks, arrows, False, True):
-        for fire_rook in firerooks:
+
+    for sand_rook in sandrooks:
+        if pygame.sprite.groupcollide(sandrooks, arrows, False, True):
+                sand_rook.decrease_health(2)
+        elif pygame.sprite.groupcollide(sandrooks, axes, False, True):
+            for sand_rook in sandrooks:
+                sand_rook.decrease_health(3)
+        elif pygame.sprite.groupcollide(sandrooks, sticks, False, True):
+                sand_rook.decrease_health(9)
+        elif pygame.sprite.groupcollide(sandrooks, hammers, False, True):
+                sand_rook.decrease_health(12)
+        if sand_rook.health <= 0:
+            #gridMatrix[()]
+            sand_rook.kill()
+
+
+    for rock_rook in rockrooks:
+        if pygame.sprite.groupcollide(rockrooks, arrows, False, True):
+                rock_rook.decrease_health(2)
+        if pygame.sprite.groupcollide(rockrooks, axes, False, True):
+                rock_rook.decrease_health(3)
+        elif pygame.sprite.groupcollide(rockrooks, sticks, False, True):
+                rock_rook.decrease_health(9)
+        elif pygame.sprite.groupcollide(rockrooks, hammers, False, True):
+                rock_rook.decrease_health(12)
+        if rock_rook.health <= 0:
+            rock_rook.kill()
+
+    for fire_rook in firerooks:
+        if pygame.sprite.groupcollide(firerooks, arrows, False, True):
             fire_rook.decrease_health(2)
-            if fire_rook.health <= 0:
-                fire_rook.kill()
-    if pygame.sprite.groupcollide(waterrooks, arrows, False, True):
-        for water_rook in waterrooks:
+        if pygame.sprite.groupcollide(firerooks, axes, False, True):
+            fire_rook.decrease_health(3)
+        elif pygame.sprite.groupcollide(firerooks, sticks, False, True):
+            fire_rook.decrease_health(9)
+        elif pygame.sprite.groupcollide(firerooks, hammers, False, True):
+            fire_rook.decrease_health(12)
+        if fire_rook.health <= 0:
+            fire_rook.kill()
+
+    for water_rook in waterrooks:
+        if pygame.sprite.groupcollide(waterrooks, arrows, False, True):
             water_rook.decrease_health(2)
-            if water_rook.health <= 0:
-                water_rook.kill()
+        if pygame.sprite.groupcollide(waterrooks, axes, False, True):
+            water_rook.decrease_health(3)
+        elif pygame.sprite.groupcollide(waterrooks, sticks, False, True):
+            water_rook.decrease_health(9)
+        elif pygame.sprite.groupcollide(waterrooks, hammers, False, True):
+            water_rook.decrease_health(12)
+        if water_rook.health <= 0:
+            water_rook.kill()
 
 
 def draw_grid(column, row, screen):
@@ -222,23 +446,20 @@ def draw_grid(column, row, screen):
     else:
         button = Button(img_square, img_squareSelect, x + (column * 95), y + (row * 80), 95, 80)
         button_matrix(x + (column * 95), y + (row * 80), column, row, button, screen)
-        damage_rooks(screen, (x + 2) + (column * 95), (y + 2) + (row * 80))
+        damage_rooks()
         if contador < 45:
             buttons_grid.add(button)
             buttons.add(buttons_grid)
             contador += 1
         return draw_grid(column + 1, row, screen)
 
+
 def principal_window():
-<<<<<<< HEAD
-    global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level
+    global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, avatar_spawnTime, new_level, avatars_left, avatars_killed
     #Place an icon on the window
     icon = pygame.image.load("rsc/logo_game.png")
     pygame.display.set_icon(icon)
-=======
-    global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, group
 
->>>>>>> 28310ca3532edeba22f569bedc6e114c8f38eeb5
     pygame.mixer.init()
     pygame.init()
     width , height = 1000, 1000
@@ -303,15 +524,9 @@ def principal_window():
             if gridMatrix[row][column] == 4:
                 rooks.add(Water(2, 295 + (column * 95), 209 + (row * 80)))
 
-    if level == 1:
-        pygame.mixer_music.load('Sounds/Battle1.mp3')
-        pygame.mixer.music.play()
-    if level == 2:
-        pygame.mixer_music.load('Sounds/Battle2.mp3')
-        pygame.mixer.music.play()
-    if level == 3:
-        pygame.mixer_music.load('Sounds/Battle3.mp3')
-        pygame.mixer.music.play()
+    #Set music
+    pygame.mixer_music.load('Sounds/Battle1.mp3')
+    pygame.mixer.music.play()
 
     #While loop
     exit = False
@@ -336,7 +551,6 @@ def principal_window():
                 if cursor.colliderect(bt_remove.rect):
                     selected = 'REMOVE'
 
-
         clock.tick(FPS)
 
         #Timer
@@ -345,6 +559,10 @@ def principal_window():
             minute += 1
             second = 0
         timer_text = font.render(": ".join([str(int(minute)), str(int(second)).zfill(2)]), True, (255, 255, 255))
+
+        #Avatars restantes
+        avatars_left_text = font.render(str(avatars_left), True, (255,255,255))
+        avatars_killed_text = font.render(str(avatars_killed), True, (255,255,255))
 
         #User
         user = font.render('PEPITO', True, (255, 255, 255))
@@ -359,6 +577,8 @@ def principal_window():
         screen.blit(user, (10,5))
         screen.blit(img_currency, (790, -15))
         screen.blit(currency_text, (890, 15))
+        screen.blit(avatars_left_text, (460, 85))
+        screen.blit(avatars_killed_text, (555, 85))
 
         if selected == 'SANDROOK':
             screen.blit(img_squareSelect2, (0, 150))
@@ -379,9 +599,11 @@ def principal_window():
         button_50.update(screen, cursor)
         button_100.update(screen, cursor)
         rooks.update(screen)
-        avatars.update(screen, gridMatrix)
+        avatars.update(screen)
         arrows.update(screen)
-        swords.update(screen)
+        axes.update(screen)
+        sticks.update(screen)
+        hammers.update(screen)
         sand_attacks.update(screen)
         rock_attacks.update(screen)
         fire_attacks.update(screen)
@@ -391,6 +613,11 @@ def principal_window():
         draw_grid(0, 0, screen)
         crystal_spawn()
         avatar_spawn()
+        if avatars_left == 0 and avatars_killed == max_avatars:
+            new_level = True
+            next_level()
+
+
         pygame.display.update()
 
     pygame.quit()

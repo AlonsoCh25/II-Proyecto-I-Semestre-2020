@@ -67,6 +67,8 @@ selected = ''
 contador = 0
 contador_2 = 0
 contador_3 = 0
+contador_4 = 0
+
 
 #Set currency
 currency = int(matrix[row_M][6])
@@ -74,8 +76,6 @@ currency = int(matrix[row_M][6])
 #Set FPS
 FPS = 30
 
-#Set attack speed
-attack_speed = int(parameter)
 
 #Set crystals
 img_crystal25 = pygame.image.load('images/25_crystal.png')
@@ -113,21 +113,67 @@ squiremove = True
 lumbermove = True
 cannibalmove = True
 
+#Set exit
+exit_ = False
 
-def next_level():
-    global level, gridMatrix, max_avatars, avatar_spawnTime, background, new_level, new_avatars, avatars_left, avatars_killed, contador_3, contador_avatars, matrix
+#Set game over
+gameover = False
+
+#Set time
+minute, second = 0,0
+
+
+def game_over():
+    global gameover, background, gridMatrix, exit_, contador_6
+
+    if gameover == True:
+        pygame.mixer_music.stop()
+        matrix[row_M][2] = 'winner'
+        background = pygame.image.load('images/game_over.png')
+        pygame.mixer_music.load('Sounds/Game_Over.mp3')
+        pygame.mixer_music.play(-1)
+        gridMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
+        sand_attacks.empty()
+        rock_attacks.empty()
+        fire_attacks.empty()
+        water_attacks.empty()
+        sandrooks.empty()
+        rockrooks.empty()
+        firerooks.empty()
+        waterrooks.empty()
+        rooks.empty()
+        buttons.empty()
+        buttons_grid.empty()
+        button_25.empty()
+        button_50.empty()
+        button_100.empty()
+        archeravatars.empty()
+        squireavatars.empty()
+        lumberavatars.empty()
+        cannibalavatars.empty()
+        avatars.empty()
+        gameover = False
+    gameover = False
+
+
+def next_level(contador_4):
+    global level, gridMatrix, max_avatars, avatar_spawnTime, background, new_level, new_avatars, avatars_left, avatars_killed, contador_3, contador_avatars, matrix, cursor, minute, second, currency, exit_, FPS
 
     if new_level == True:
         level += 1
         if level > 3:
+            pygame.mixer_music.stop()
             matrix[row_M][2] = 'winner'
             background = pygame.image.load('images/Win.png')
-            pygame.mixer_music.stop()
             pygame.mixer_music.load('Sounds/Win_sound.mp3')
             pygame.mixer_music.play(-1)
             gridMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0],
                           [0, 0, 0, 0, 0],
                           [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
+            avatars_killed = 0
+            contador_avatars = 0
             sand_attacks.empty()
             rock_attacks.empty()
             fire_attacks.empty()
@@ -142,9 +188,7 @@ def next_level():
             button_25.empty()
             button_50.empty()
             button_100.empty()
-            img_home = pygame.image.load('rsc/btn_return.png')
-            bt_return = Button(img_home, img_home, 500,500, 100, 100)
-            buttons.add(bt_return)
+
 
         if level == 2:
             pygame.mixer_music.stop()
@@ -199,9 +243,23 @@ def next_level():
         new_level = False
     new_level = False
 
+    if level > 3:
+        if contador_4 >= 5 * FPS:
+            matrix[row_M][6] = currency
+            matrix[row_M][4] = level
+            matrix[row_M][5] = avatars_killed
+            matrix[row_M][7] = minute
+            matrix[row_M][8] = round(second)
+            matrix[row_M][3] = gridMatrix
+            csv_scoreboard.write(matrix)
+            csv_scoreboard.update_matrix("ScoreBoard.csv", "w")
+            exit_ = True
+            pygame.quit()
+            main_window()
+
 
 def avatar_spawn():
-    global contador_3, contador_avatars, FPS, currency, avatar_spawnTime, spawn_avatars, gridMatrix, new_avatars
+    global contador_3, contador_avatars, FPS, currency, avatar_spawnTime, spawn_avatars, gridMatrix, new_avatars, max_avatars
 
     x, y = 295, 209
     if new_avatars == True:
@@ -236,7 +294,7 @@ def avatar_spawn():
 
 
 def avatar_functions():
-    global archermove, squiremove, lumbermove, cannibalmove, currency, avatars_left, avatars_killed
+    global archermove, squiremove, lumbermove, cannibalmove, currency, avatars_left, avatars_killed, gameover, contador_5, level, FPS
 
     for archer in archeravatars:
         archer.move(archermove)
@@ -340,6 +398,12 @@ def avatar_functions():
             currency += 75
             avatars_left -= 1
             avatars_killed += 1
+
+    for allavatars in avatars:
+        if allavatars.rect.top >= 849:
+            gameover = True
+            game_over()
+
 
 
 def crystal_spawn():
@@ -506,7 +570,7 @@ def draw_grid(column, row, screen):
 
 
 def principal_window():
-    global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, avatar_spawnTime, new_level, avatars_left, avatars_killed
+    global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, avatar_spawnTime, new_level, avatars_left, avatars_killed, contador_avatars, max_avatars, exit_, contador_4, minute, second
 
     #Place an icon on the window
     icon = pygame.image.load("rsc/logo_game.png")
@@ -579,15 +643,18 @@ def principal_window():
     second = int(matrix[row_M][8])
     minute = int(matrix[row_M][7])
 
+    pygame.mixer_music.load('Sounds/Battle1.mp3')
     if level == 2:
         avatar_spawnTime = 4 - (4 * 0.3)
         max_avatars = 15 + int(15 * 0.3)
         avatars_left = max_avatars - avatars_killed
         background = pygame.image.load("images/background_2.png")
+        pygame.mixer_music.load('Sounds/Battle2.mp3')
     elif level == 3:
         avatar_spawnTime = 4 - (4 * 0.6)
         max_avatars = 15 + int(15 * 0.6)
         avatars_left = max_avatars - avatars_killed
+        pygame.mixer_music.load('Sounds/Battle3.mp3')
         background = pygame.image.load("images/background_3.png")
 
 
@@ -603,13 +670,10 @@ def principal_window():
                 rooks.add(Water(2, 295 + (column * 95), 209 + (row * 80)))
 
     #Set music
-    pygame.mixer_music.load('Sounds/Battle1.mp3')
-    #pygame.mixer.music.play(-1)
+    pygame.mixer.music.play(-1)
 
-    #While loop
-    exit = False
     #pause = False
-    while exit != True:
+    while exit_ != True:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -620,11 +684,10 @@ def principal_window():
                 matrix[row_M][5] = avatars_killed
                 matrix[row_M][7] = minute
                 matrix[row_M][8] = round(second)
-                print(gridMatrix)
                 matrix[row_M][3] = gridMatrix
                 csv_scoreboard.write(matrix)
                 csv_scoreboard.update_matrix("ScoreBoard.csv", "w")
-                exit = True
+                exit_ = True
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if cursor.colliderect(bt_sandRook.rect):
@@ -704,7 +767,11 @@ def principal_window():
         avatar_spawn()
         if avatars_left == 0 and avatars_killed == max_avatars:
             new_level = True
-            next_level()
+            next_level(0)
+        if level > 3:
+            contador_4 += 1
+            if contador_4 >= 5 * FPS:
+                next_level(contador_4)
 
 
         pygame.display.update()

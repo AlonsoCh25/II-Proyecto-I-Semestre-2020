@@ -574,13 +574,11 @@ def principal_window():
     minute = int(matrix[row_M][7])
 
     if level == 2:
-        print('hola2')
         avatar_spawnTime = 4 - (4 * 0.3)
         max_avatars = 15 + int(15 * 0.3)
         avatars_left = max_avatars - avatars_killed
         background = pygame.image.load("images/background_2.png")
     elif level == 3:
-        print('hola3')
         avatar_spawnTime = 4 - (4 * 0.6)
         max_avatars = 15 + int(15 * 0.6)
         avatars_left = max_avatars - avatars_killed

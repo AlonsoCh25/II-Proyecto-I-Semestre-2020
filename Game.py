@@ -195,7 +195,9 @@ def draw_grid(column, row):
 
 def principal_window():
     global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level
-
+    #Place an icon on the window
+    icon = pygame.image.load("rsc/logo_game.png")
+    pygame.display.set_icon(icon)
     pygame.mixer.init()
     pygame.init()
     width , height = 1000, 1000

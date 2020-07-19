@@ -227,6 +227,7 @@ def avatar_functions():
                 archermove = False
             else:
                 archermove = True
+                
         if pygame.sprite.spritecollide(archer, sand_attacks, True):
             archer.decrease_health(2)
         elif pygame.sprite.spritecollide(archer, rock_attacks, True):

@@ -405,7 +405,7 @@ def damage_rooks():
         elif pygame.sprite.groupcollide(sandrooks, hammers, False, True):
                 sand_rook.decrease_health(12)
         if sand_rook.health <= 0:
-            #gridMatrix[()]
+            gridMatrix[((sand_rook.rect.left - 295) / 95)][((sand_rook.rect.top - 209) / 80)] = 0
             sand_rook.kill()
 
 

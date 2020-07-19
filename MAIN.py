@@ -413,7 +413,7 @@ def damage_rooks():
         elif pygame.sprite.groupcollide(sandrooks, hammers, False, True):
                 sand_rook.decrease_health(12)
         if sand_rook.health <= 0:
-            #gridMatrix[()]
+            gridMatrix[int((sand_rook.rect.left - 295) / 95)][(int(sand_rook.rect.top - 209) / 80)] = 0
             sand_rook.kill()
 
 
@@ -427,6 +427,8 @@ def damage_rooks():
         elif pygame.sprite.groupcollide(rockrooks, hammers, False, True):
                 rock_rook.decrease_health(12)
         if rock_rook.health <= 0:
+            gridMatrix[int((rock_rook.rect.left - 295) / 95)][int((rock_rook.rect.top - 209) / 80)] = 0
+            print(gridMatrix)
             rock_rook.kill()
 
     for fire_rook in firerooks:
@@ -439,6 +441,7 @@ def damage_rooks():
         elif pygame.sprite.groupcollide(firerooks, hammers, False, True):
             fire_rook.decrease_health(12)
         if fire_rook.health <= 0:
+            gridMatrix[int((fire_rook.rect.left - 295) / 95)][int((fire_rook.rect.top - 209) / 80)] = 0
             fire_rook.kill()
 
     for water_rook in waterrooks:
@@ -451,6 +454,7 @@ def damage_rooks():
         elif pygame.sprite.groupcollide(waterrooks, hammers, False, True):
             water_rook.decrease_health(12)
         if water_rook.health <= 0:
+            gridMatrix[int((water_rook.rect.left - 295) / 95)][int((water_rook.rect.top - 209) / 80)] = 0
             water_rook.kill()
 
 

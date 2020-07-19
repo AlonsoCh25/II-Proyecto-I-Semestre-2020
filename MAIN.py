@@ -41,6 +41,7 @@ rooks = pygame.sprite.Group()
 avatars = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 row_M = 0
+parameter = 0
 
 #Set cursor
 cursor = Cursor()
@@ -68,10 +69,13 @@ contador_2 = 0
 contador_3 = 0
 
 #Set currency
-currency = matrix[row_M][6]
+currency = int(matrix[row_M][6])
 
 #Set FPS
 FPS = 30
+
+#Set attack speed
+attack_speed = int(parameter)
 
 #Set crystals
 img_crystal25 = pygame.image.load('images/25_crystal.png')
@@ -79,36 +83,24 @@ img_crystal50 = pygame.image.load('images/50_crystal.png')
 img_crystal100 = pygame.image.load('images/100_crystal.png')
 
 #Set level
-level = matrix[row_M][4]
+level = int(matrix[row_M][4])
 
 #Set column, row of grid
 group = 0
 
 #Set avatars spawn timer
 avatar_spawnTime = 4
-if level == 2:
-    avatar_spawnTime = 4 - (4 * 0.3)
-elif level == 3:
-    avatar_spawnTime = 4 - (4 * 0.6)
 
 #Set max avatar spawn
 spawn_avatars = True
 contador_avatars = 0
 max_avatars = 15
-if level == 2:
-    max_avatars = 15 + int(15 * 0.3)
-if level == 3:
-    max_avatars = 15 + int(15 * 0.6)
 
-avatars_left = max_avatars
-avatars_killed = matrix[row_M][5]
+avatars_killed = int(matrix[row_M][5])
+avatars_left = max_avatars - avatars_killed
 
 # Set background
 background = pygame.image.load("images/background_1.png")
-if level == 2:
-    background = pygame.image.load("images/background_2.png")
-elif level == 3:
-    background = pygame.image.load("images/background_3.png")
 
 # Set new level variables
 new_level = False
@@ -123,16 +115,16 @@ cannibalmove = True
 
 
 def next_level():
-    global level, gridMatrix, max_avatars, avatar_spawnTime, background, new_level, new_avatars, avatars_left, avatars_killed, contador_3, contador_avatars, winner
+    global level, gridMatrix, max_avatars, avatar_spawnTime, background, new_level, new_avatars, avatars_left, avatars_killed, contador_3, contador_avatars, matrix
 
     if new_level == True:
         level += 1
         if level > 3:
-            winner = 'winner'
-            '''background = pygame.image.load('images/winner.png')
+            matrix[row_M][2] = 'winner'
+            background = pygame.image.load('images/Win.png')
             pygame.mixer_music.stop()
-            pygame.mixer_music.load('Sounds/Winner.mp3')
-            pygame.mixer_music.play()
+            pygame.mixer_music.load('Sounds/Win_sound.mp3')
+            pygame.mixer_music.play(-1)
             gridMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0],
                           [0, 0, 0, 0, 0],
                           [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
@@ -144,7 +136,15 @@ def next_level():
             rockrooks.empty()
             firerooks.empty()
             waterrooks.empty()
-            rooks.empty()'''
+            rooks.empty()
+            buttons.empty()
+            buttons_grid.empty()
+            button_25.empty()
+            button_50.empty()
+            button_100.empty()
+            img_home = pygame.image.load('rsc/btn_return.png')
+            bt_return = Button(img_home, img_home, 500,500, 100, 100)
+            buttons.add(bt_return)
 
         if level == 2:
             pygame.mixer_music.stop()
@@ -240,9 +240,15 @@ def avatar_functions():
 
     for archer in archeravatars:
         archer.move(archermove)
-        for allrooks in rooks:
-            if (archer.rect.top + 100) >= allrooks.rect.top and archer.rect.left == allrooks.rect.left:
-                archermove = False
+        if len(rooks) > 0:
+            for allrooks in rooks:
+                if (archer.rect.top + 100) >= allrooks.rect.top and archer.rect.left == allrooks.rect.left:
+                    archermove = False
+                else:
+                    archermove = True
+        else:
+            archermove = True
+
         if pygame.sprite.spritecollide(archer, sand_attacks, True):
             archer.decrease_health(2)
         elif pygame.sprite.spritecollide(archer, rock_attacks, True):
@@ -259,9 +265,15 @@ def avatar_functions():
 
     for squire in squireavatars:
         squire.move(squiremove)
-        for allrooks in rooks:
-            if (squire.rect.top + 100) >= allrooks.rect.top and squire.rect.left == allrooks.rect.left:
-                squiremove = False
+        if len(rooks) > 0:
+            for allrooks in rooks:
+                if (squire.rect.top + 100) >= allrooks.rect.top and squire.rect.left == allrooks.rect.left:
+                    squiremove = False
+                else:
+                    squiremove = True
+        else:
+            squiremove = True
+
         if pygame.sprite.spritecollide(squire, sand_attacks, True):
             squire.decrease_health(2)
         elif pygame.sprite.spritecollide(squire, rock_attacks, True):
@@ -278,10 +290,17 @@ def avatar_functions():
 
     for lumber in lumberavatars:
         lumber.move(lumbermove)
-        for allrooks in rooks:
-            if (lumber.rect.top + 100) >= allrooks.rect.top and lumber.rect.left == allrooks.rect.left:
-                lumbermove = False
-                lumber.attack(True)
+        if len(rooks) > 0:
+            for allrooks in rooks:
+                if (lumber.rect.top + 100) >= allrooks.rect.top and lumber.rect.left == allrooks.rect.left:
+                    lumbermove = False
+                    lumber.attack(True)
+                else:
+                    lumbermove = True
+                    lumber.attack(False)
+        else:
+            lumbermove = True
+
         if pygame.sprite.spritecollide(lumber, sand_attacks, True):
             lumber.decrease_health(2)
         elif pygame.sprite.spritecollide(lumber, rock_attacks, True):
@@ -298,10 +317,16 @@ def avatar_functions():
 
     for cannibal in cannibalavatars:
         cannibal.move(cannibalmove)
-        for allrooks in rooks:
-            if (cannibal.rect.top + 100) >= allrooks.rect.top and cannibal.rect.left == allrooks.rect.left:
-                cannibalmove = False
-                cannibal.attack(True)
+        if len(rooks) > 0:
+            for allrooks in rooks:
+                if (cannibal.rect.top + 100) >= allrooks.rect.top and cannibal.rect.left == allrooks.rect.left:
+                    cannibalmove = False
+                    cannibal.attack(True)
+                else:
+                    cannibalmove = True
+                    cannibal.attack(False)
+        else:
+            cannibalmove = True
         if pygame.sprite.spritecollide(cannibal, sand_attacks, True):
             cannibal.decrease_health(2)
         elif pygame.sprite.spritecollide(cannibal, rock_attacks, True):
@@ -357,7 +382,7 @@ def crystal_spawn():
 
 
 def button_matrix(posx, posy, column, row, button, screen):
-    global selected, currency, rooks, all_sprites, sand_rook
+    global selected, currency, rooks, all_sprites, sand_rook, parameter
 
     click = pygame.mouse.get_pressed()
     img_square = pygame.image.load("images/square.png")
@@ -373,28 +398,28 @@ def button_matrix(posx, posy, column, row, button, screen):
                             gridMatrix[row][column] = 1
                             selected = ''
                             currency -= 50
-                            sandrooks.add(Sand(2, posx, posy))
+                            sandrooks.add(Sand(int(parameter), posx, posy))
                             rooks.add(sandrooks)
                     if selected == 'ROCKROOK':
                         if currency >= 100:
                             gridMatrix[row][column] = 2
                             selected = ''
                             currency -= 100
-                            rockrooks.add(Rock(2, posx, posy))
+                            rockrooks.add(Rock(int(parameter), posx, posy))
                             rooks.add(rockrooks)
                     if selected == 'FIREROOK':
                         if currency >= 150:
                             gridMatrix[row][column] = 3
                             selected = ''
                             currency -= 150
-                            firerooks.add(Fire(2, posx, posy))
+                            firerooks.add(Fire(int(parameter), posx, posy))
                             rooks.add(firerooks)
                     if selected == 'WATERROOK':
                         if currency >= 150:
                             gridMatrix[row][column] = 4
                             selected = ''
                             currency -= 150
-                            waterrooks.add(Water(2, posx, posy))
+                            waterrooks.add(Water(int(parameter), posx, posy))
                             rooks.add(waterrooks)
             if selected == 'REMOVE' and gridMatrix[row][column] != 0:
                 gridMatrix[row][column] = 0
@@ -554,6 +579,18 @@ def principal_window():
     #Set timer
     second = int(matrix[row_M][8])
     minute = int(matrix[row_M][7])
+
+    if level == 2:
+        avatar_spawnTime = 4 - (4 * 0.3)
+        max_avatars = 15 + int(15 * 0.3)
+        avatars_left = max_avatars - avatars_killed
+        background = pygame.image.load("images/background_2.png")
+    elif level == 3:
+        avatar_spawnTime = 4 - (4 * 0.6)
+        max_avatars = 15 + int(15 * 0.6)
+        avatars_left = max_avatars - avatars_killed
+        background = pygame.image.load("images/background_3.png")
+
 
     for row in range(len(gridMatrix)):
         for column in range(len(gridMatrix[row])):

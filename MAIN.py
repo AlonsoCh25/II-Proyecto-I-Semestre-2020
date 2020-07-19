@@ -498,12 +498,12 @@ def transition_login(user):
             else:
                 row += 1
         if not found:     
-            matrix.append([user, initial_scoreboard, "Winner", matrix_v, level, avatars])
+            matrix.append([user, initial_scoreboard, "Loser", matrix_v, level, avatars])
             csv_scoreboard.write(matrix)
             csv_scoreboard.update_matrix("ScoreBoard.csv","w")
             principal_window()
     else:
-        matrix.append([user, initial_scoreboard, "Winner", matrix_v, level, avatars])
+        matrix.append([user, initial_scoreboard, "Loser", matrix_v, level, avatars])
         csv_scoreboard.write(matrix)
         csv_scoreboard.update_matrix("ScoreBoard.csv","w")
         principal_window()

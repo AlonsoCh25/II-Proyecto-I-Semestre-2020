@@ -506,8 +506,8 @@ def draw_grid(column, row, screen):
 
 
 def principal_window():
-    global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, avatar_spawnTime, new_level, avatars_left, avatars_killed, parameter
-    print(parameter)
+    global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, avatar_spawnTime, new_level, avatars_left, avatars_killed, parameter, max_avatars
+    print(max_avatars)
 
     #Place an icon on the window
     icon = pygame.image.load("rsc/logo_game.png")

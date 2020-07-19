@@ -31,7 +31,7 @@ class Rock(pygame.sprite.Sprite):
         self.health_bar = self.health_bar100
         self.rect_health_bar = self.image.get_rect()
         self.rect_health_bar.left = x + 2
-        self.rect_health_bar.top = y + 5
+        self.rect_health_bar.top = y - 10
 
     def decrease_health(self, damage):
         self.health -= damage

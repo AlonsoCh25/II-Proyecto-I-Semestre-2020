@@ -84,7 +84,6 @@ img_crystal100 = pygame.image.load('images/100_crystal.png')
 
 #Set level
 level = int(matrix[row_M][4])
-print(type(level))
 
 #Set column, row of grid
 group = 0
@@ -98,7 +97,6 @@ contador_avatars = 0
 max_avatars = 15
 
 avatars_killed = int(matrix[row_M][5])
-print(type(avatars_killed))
 avatars_left = max_avatars - avatars_killed
 
 # Set background
@@ -117,12 +115,12 @@ cannibalmove = True
 
 
 def next_level():
-    global level, gridMatrix, max_avatars, avatar_spawnTime, background, new_level, new_avatars, avatars_left, avatars_killed, contador_3, contador_avatars, winner
+    global level, gridMatrix, max_avatars, avatar_spawnTime, background, new_level, new_avatars, avatars_left, avatars_killed, contador_3, contador_avatars, matrix
 
     if new_level == True:
         level += 1
         if level > 3:
-            winner = 'winner'
+            matrix[row_M][2] = 'winner'
             background = pygame.image.load('images/Win.png')
             pygame.mixer_music.stop()
             pygame.mixer_music.load('Sounds/Win_sound.mp3')
@@ -139,6 +137,14 @@ def next_level():
             firerooks.empty()
             waterrooks.empty()
             rooks.empty()
+            buttons.empty()
+            buttons_grid.empty()
+            button_25.empty()
+            button_50.empty()
+            button_100.empty()
+            img_home = pygame.image.load('rsc/btn_return.png')
+            bt_return = Button(img_home, img_home, 500,500, 100, 100)
+            buttons.add(bt_return)
 
         if level == 2:
             pygame.mixer_music.stop()

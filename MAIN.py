@@ -481,7 +481,8 @@ def draw_grid(column, row, screen):
 
 
 def principal_window():
-    global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, avatar_spawnTime, new_level, avatars_left, avatars_killed
+    global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, avatar_spawnTime, new_level, avatars_left, avatars_killed, parameter
+    print(parameter)
 
     #Place an icon on the window
     icon = pygame.image.load("rsc/logo_game.png")
@@ -583,7 +584,6 @@ def principal_window():
                 matrix[row_M][5] = avatars_killed
                 matrix[row_M][7] = minute
                 matrix[row_M][8] = round(second)
-                print(gridMatrix)
                 matrix[row_M][3] = gridMatrix
                 csv_scoreboard.write(matrix)
                 csv_scoreboard.update_matrix("ScoreBoard.csv", "w")
@@ -600,8 +600,6 @@ def principal_window():
                     selected = 'WATERROOK'
                 if cursor.colliderect(bt_remove.rect):
                     selected = 'REMOVE'
-
-        print(gridMatrix)
 
         clock.tick(FPS)
 

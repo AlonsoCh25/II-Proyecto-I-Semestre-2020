@@ -123,7 +123,7 @@ gameover = False
 #Set time
 minute, second = 0,0
 
-
+#Function that creates the window of game over
 def game_over():
     #Place an icon on the window
     icon = pygame.image.load("rsc/logo_game.png")

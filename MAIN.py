@@ -1115,13 +1115,16 @@ def credits_window():
         
     pygame.quit()
 def sort_matrix():
+    #Define the caribles to sort the matriz
     sort = True
     archive_csv = csv_class("ScoreBoard.csv","rt")
     matrix_csv = archive_csv.get_matrix()
     row = 0
     minutes = 7
     seconds = 8
+    #Sort the matrix
     while sort:
+        #Change the positions of the lines
         if len(matrix_csv)-1 > row:
             if matrix_csv[row][minutes] < (matrix_csv[row+1][minutes]):
                 B = matrix_csv[row][minutes]
@@ -1138,6 +1141,7 @@ def sort_matrix():
                     row += 1
             elif matrix_csv[row][minutes] > matrix_csv[row+1][minutes]:
                 row += 1
+        #Save the sort matrix
         else:
             archive_csv.write(matrix_csv)
             archive_csv.update_matrix("ScoreBoard.csv","w")

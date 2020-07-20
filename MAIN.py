@@ -891,6 +891,17 @@ def principal_window():
     pygame.quit()
 
 
+
+
+
+
+
+
+
+
+
+
+
 """Functions"""
 def main_window():
     #Contains the row of the matrix the user is in
@@ -1140,6 +1151,7 @@ def login_window():
     pygame.font.init
     weight, height = 500,400
     login_screen = pygame.display.set_mode((weight,height))
+
     pygame.mixer.music.set_volume(volume)
     pygame.mixer_music.load('Sounds/Login Sound.mp3')
     pygame.mixer_music.play(1)
@@ -1491,3 +1503,4 @@ def multi_line_reader(screen, txt, x,y, font,colour=(128,128,128), justification
 
 login_window()
 #game_over()
+    

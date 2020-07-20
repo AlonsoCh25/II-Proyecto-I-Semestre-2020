@@ -189,6 +189,7 @@ def game_over():
         
     pygame.quit()
 
+#Function that creates the winner window
 def winner():
     #Place an icon on the window
     icon = pygame.image.load("rsc/logo_game.png")
@@ -246,6 +247,7 @@ def winner():
         
     pygame.quit()
 
+#Function that advances levels in the game
 def next_level(contador_4):
     global level, gridMatrix, max_avatars, avatar_spawnTime, background, new_level, new_avatars, avatars_left, avatars_killed, contador_3, contador_avatars, matrix, cursor, minute, second, currency, exit_, FPS
 
@@ -342,7 +344,7 @@ def next_level(contador_4):
     new_level = False
             
 
-
+#Function that defines the spawn of a avatar
 def avatar_spawn():
     global contador_3, contador_avatars, FPS, currency, avatar_spawnTime, spawn_avatars, gridMatrix, new_avatars, max_avatars
 
@@ -377,7 +379,7 @@ def avatar_spawn():
 
     avatar_functions()
 
-
+#Function that gives/check movement, attack and damage recieval to the avatars
 def avatar_functions():
     global archermove, squiremove, lumbermove, cannibalmove, currency, avatars_left, avatars_killed, gameover, contador_5, level, FPS, exit_,background, gridMatrix, contador_6
 
@@ -512,7 +514,7 @@ def avatar_functions():
             game_over()
 
 
-
+#Function that spawns a random gem in the determined spot in the screen
 def crystal_spawn():
     global contador_2, currency, FPS, button_25, button_50, button_100
 
@@ -551,7 +553,7 @@ def crystal_spawn():
         button_100.empty()
         contador_2 = 0
 
-
+#Function that spawns rooks in the map and modifies the matrix
 def button_matrix(posx, posy, column, row, button, screen):
     global selected, currency, rooks, all_sprites, sand_rook, parameter
 
@@ -597,7 +599,7 @@ def button_matrix(posx, posy, column, row, button, screen):
                 selected = ''
                 pygame.sprite.spritecollide(cursor_rect, rooks, True)
 
-
+#Function that gives/checks attacking and damage recieval to rooks
 def damage_rooks():
     global health_fireRook, health_waterRook, group
 
@@ -655,7 +657,7 @@ def damage_rooks():
             gridMatrix[int((water_rook.rect.top - 295) / 95)][int((water_rook.rect.left - 209) / 80)] = 0
             water_rook.kill()
 
-
+#Function that draws the matrix of buttons
 def draw_grid(column, row, screen):
     global contador
 
@@ -676,7 +678,7 @@ def draw_grid(column, row, screen):
             contador += 1
         return draw_grid(column + 1, row, screen)
 
-
+#Function that makes the game window function
 def principal_window():
     global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, avatar_spawnTime, new_level, avatars_left, avatars_killed, contador_avatars, max_avatars, exit_, contador_4, minute, second
     global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, avatar_spawnTime, new_level, avatars_left, avatars_killed, parameter

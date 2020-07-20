@@ -167,6 +167,13 @@ def game_over():
                 pygame.quit()
                 break
             #Define the action of the mouse button
+            if event.type == pygame.KEYDOWN:
+               if event.key == 13:
+                    exit_ = True
+                    pygame.quit()
+                    main_window()
+                    break
+                
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if cursor.colliderect(bt_return.rect):
                     print("Push Return Menu")
@@ -178,6 +185,61 @@ def game_over():
         
     pygame.quit()
 
+def winner():
+    #Place an icon on the window
+    icon = pygame.image.load("rsc/logo_game.png")
+    pygame.display.set_icon(icon)
+    #Settings of the screen
+    pygame.init()
+    pygame.font.init
+    weight, height = 800,600
+    bt_weight,bt_heigth = 70,70
+    winner_screen = pygame.display.set_mode((weight,height))
+    pygame.mixer_music.load('Sounds/Win_sound.mp3')
+    pygame.mixer_music.play(1)
+    #Set initial clock
+    clock = pygame.time.Clock()
+
+    
+    #Images of the screen
+    background = pygame.image.load("images/Win.png")
+    
+    #Background
+    winner_screen.blit(pygame.transform.scale(background,(weight,height)),(0,0))
+    
+    img_return=pygame.image.load("rsc/btn_return.png")
+    cursor = Cursor()
+    bt_return =Button(img_return,img_return,(weight-bt_weight-10),(height-100),bt_weight,bt_heigth)
+
+    
+    #While of the loop
+    exit_ = False
+    while exit_ != True:
+        #Set the blits in the screen
+        bt_return.update(winner_screen,cursor)
+        pygame.display.update()
+        cursor.update()
+        
+        #Set th FPS
+        clock.tick(60)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                #Exit
+                exit_ = True
+                pygame.quit()
+                break
+            #Define the action of the mouse button
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if cursor.colliderect(bt_return.rect):
+                    print("Push Return Menu")
+                    exit_ = True
+                    pygame.quit()
+                    main_window()
+                    break
+                
+        
+    pygame.quit()
 
 def next_level(contador_4):
     global level, gridMatrix, max_avatars, avatar_spawnTime, background, new_level, new_avatars, avatars_left, avatars_killed, contador_3, contador_avatars, matrix, cursor, minute, second, currency, exit_, FPS
@@ -185,11 +247,7 @@ def next_level(contador_4):
     if new_level == True:
         level += 1
         if level > 3:
-            pygame.mixer_music.stop()
             matrix[row_M][2] = 'winner'
-            background = pygame.image.load('images/Win.png')
-            pygame.mixer_music.load('Sounds/Win_sound.mp3')
-            pygame.mixer_music.play(-1)
             gridMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0],
                           [0, 0, 0, 0, 0],
                           [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
@@ -209,6 +267,18 @@ def next_level(contador_4):
             button_25.empty()
             button_50.empty()
             button_100.empty()
+            
+            matrix[row_M][6] = currency
+            matrix[row_M][4] = 0
+            matrix[row_M][5] = avatars_killed
+            matrix[row_M][7] = minute
+            matrix[row_M][8] = round(second)
+            matrix[row_M][3] = gridMatrix
+            csv_scoreboard.write(matrix)
+            csv_scoreboard.update_matrix("ScoreBoard.csv", "w")
+            exit_ = True
+            pygame.quit()
+            winner()
 
 
         if level == 2:
@@ -263,20 +333,7 @@ def next_level(contador_4):
 
         new_level = False
     new_level = False
-
-    if level > 3:
-        if contador_4 >= 5 * FPS:
-            matrix[row_M][6] = currency
-            matrix[row_M][4] = level
-            matrix[row_M][5] = avatars_killed
-            matrix[row_M][7] = minute
-            matrix[row_M][8] = round(second)
-            matrix[row_M][3] = gridMatrix
-            csv_scoreboard.write(matrix)
-            csv_scoreboard.update_matrix("ScoreBoard.csv", "w")
-            exit_ = True
-            pygame.quit()
-            main_window()
+            
 
 
 def avatar_spawn():
@@ -1386,5 +1443,5 @@ def multi_line_reader(screen, txt, x,y, font,colour=(128,128,128), justification
         y += bitmap.get_height()
 
 login_window()
-    
+#game_over()    
     

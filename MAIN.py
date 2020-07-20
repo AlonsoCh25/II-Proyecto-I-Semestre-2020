@@ -1112,10 +1112,39 @@ def credits_window():
                 
         
     pygame.quit()
+def sort_matrix():
+    sort = True
+    archive_csv = csv_class("ScoreBoard.csv","rt")
+    matrix_csv = archive_csv.get_matrix()
+    row = 0
+    minutes = 7
+    seconds = 8
+    while sort:
+        if len(matrix_csv)-1 > row:
+            if matrix_csv[row][minutes] < (matrix_csv[row+1][minutes]):
+                B = matrix_csv[row][minutes]
+                matrix_csv[row][minutes] = matrix_csv[row+1][minutes]
+                matrix_csv[row+1][minutes] = B
+                row = 0
+            elif matrix_csv[row][minutes] == matrix_csv[row+1][minutes]:
+                if matrix_csv[row][seconds] < matrix_csv[row+1][seconds]:
+                    B = matrix_csv[row][seconds]
+                    matrix_csv[row][seconds] = matrix_csv[row+1][seconds]
+                    matrix_csv[row+1][seconds] = B
+                    row = 0
+                elif matrix_csv[row][minutes] >= matrix_csv[row+1][minutes]:
+                    row += 1
+            elif matrix_csv[row][minutes] > matrix_csv[row+1][minutes]:
+                row += 1
+        else:
+            archive_csv.write(matrix_csv)
+            archive_csv.update_matrix("ScoreBoard.csv","w")
+            sort = False
 
 def login_window():
     #import pygame_textinput
     #Settings of the screen
+    sort_matrix()
     icon = pygame.image.load("rsc/logo_game.png")
     pygame.display.set_icon(icon)
     pygame.init()
@@ -1321,7 +1350,11 @@ def help_window():
                     main_window()
                     break
     pygame.quit()
-    
+
+            
+        
+        
+        
 def scoreboard_window():
     #Settings of the screen
     icon = pygame.image.load("rsc/logo_game.png")

@@ -46,6 +46,7 @@ parameter = 0
 #Set cursor
 cursor = Cursor()
 
+volume = 0.1
 #Load the csv
 csv_scoreboard = csv_class("ScoreBoard.csv","rt")
 matrix = csv_scoreboard.get_matrix()
@@ -137,6 +138,9 @@ def game_over():
     #Set initial clock
     clock = pygame.time.Clock()
 
+    pygame.mixer.music.set_volume(volume)
+    pygame.mixer_music.load('Sounds/Game_Over.mp3')
+    pygame.mixer_music.play(1)
     
     #Images of the screen
     background = pygame.image.load("images/game_over.png")
@@ -195,6 +199,7 @@ def winner():
     weight, height = 800,600
     bt_weight,bt_heigth = 70,70
     winner_screen = pygame.display.set_mode((weight,height))
+    pygame.mixer.music.set_volume(volume)
     pygame.mixer_music.load('Sounds/Win_sound.mp3')
     pygame.mixer_music.play(1)
     #Set initial clock
@@ -290,6 +295,7 @@ def next_level(contador_4):
             avatars_killed = 0
             contador_3 = 0
             contador_avatars = 0
+            pygame.mixer.music.set_volume(volume)
             pygame.mixer_music.load('Sounds/Battle2.mp3')
             pygame.mixer.music.play(-1)
             gridMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0],
@@ -315,6 +321,7 @@ def next_level(contador_4):
             avatars_killed = 0
             contador_3 = 0
             contador_avatars = 0
+            pygame.mixer.music.set_volume(volume)
             pygame.mixer_music.load('Sounds/Battle3.mp3')
             pygame.mixer.music.play(-1)
             gridMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0],
@@ -745,18 +752,20 @@ def principal_window():
     #Set timer
     second = int(matrix[row_M][8])
     minute = int(matrix[row_M][7])
-
+    pygame.mixer.music.set_volume(volume)
     pygame.mixer_music.load('Sounds/Battle1.mp3')
     if level == 2:
         avatar_spawnTime = 4 - (4 * 0.3)
         max_avatars = 15 + int(15 * 0.3)
         avatars_left = max_avatars - avatars_killed
         background = pygame.image.load("images/background_2.png")
+        pygame.mixer.music.set_volume(volume)
         pygame.mixer_music.load('Sounds/Battle2.mp3')
     elif level == 3:
         avatar_spawnTime = 4 - (4 * 0.6)
         max_avatars = 15 + int(15 * 0.6)
         avatars_left = max_avatars - avatars_killed
+        pygame.mixer.music.set_volume(volume)
         pygame.mixer_music.load('Sounds/Battle3.mp3')
         background = pygame.image.load("images/background_3.png")
 
@@ -910,6 +919,9 @@ def main_window():
     weight, height = 952,768
     screen = pygame.display.set_mode((weight,height))
     
+    pygame.mixer.music.set_volume(volume)
+    pygame.mixer_music.load('Sounds/Menu.mp3')
+    pygame.mixer_music.play(1)
     #CSV Archive
     csv_scoreboard = csv_class("ScoreBoard.csv","rt")
 
@@ -1108,7 +1120,10 @@ def login_window():
     pygame.font.init
     weight, height = 500,400
     login_screen = pygame.display.set_mode((weight,height))
-    
+
+    pygame.mixer.music.set_volume(volume)
+    pygame.mixer_music.load('Sounds/Login Sound.mp3')
+    pygame.mixer_music.play(1)
     
     
     #FONT
@@ -1443,5 +1458,5 @@ def multi_line_reader(screen, txt, x,y, font,colour=(128,128,128), justification
         y += bitmap.get_height()
 
 login_window()
-#game_over()    
+#game_over()
     

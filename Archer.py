@@ -42,11 +42,7 @@ class Archer(pygame.sprite.Sprite):
         if movement == True:
             self.counter_move += 1
 
-            '''if self.counter_move >= self.movement_time * FPS:
-                self.rect.top += 80
-                self.rect_health_bar.top += 80
-                self.counter_move = 0'''
-            if self.counter_move >= self.movement_time:
+            if self.counter_move >= self.movement_time * FPS:
                 self.rect.top += 80
                 self.rect_health_bar.top += 80
                 self.counter_move = 0

@@ -935,9 +935,11 @@ def main_window():
     font_user = pygame.font.Font("triforce.ttf",40)
 
     #Text
-    user_text = matrix[row_M][0] 
-    scoreboard_text = "ScoreBoard:" +" "+ matrix[row_M][1]
-    
+    user_text = matrix[row_M][0]
+    if int(matrix[row_M][8]) <= 9:
+        scoreboard_text = "ScoreBoard:" +" "+ matrix[row_M][7] + ":" + "0" + matrix[row_M][8]
+    else:
+        scoreboard_text = "ScoreBoard:" +" "+ matrix[row_M][7] + ":" + matrix[row_M][8]
     #Render
     txt_user = font_user.render(user_text, True, (255,255,255))
     txt_scoreboard = font_user.render(scoreboard_text, True, (255,255,255))
@@ -1344,14 +1346,23 @@ def scoreboard_window():
     txt = ""
     for l in matrix_csv:
         if str(l[2]) == "winner":
-            txt += "\n"
-            txt += str(l[0])
-            txt += " "
-            txt += str(l[7])
-            txt += ":"
-            txt += str(l[8])
-            txt += "\n"
-            
+            if int(l[8]) <= 9:
+                txt += str(l[0])
+                txt += " "
+                txt += str(l[7])
+                txt += ":"
+                txt += "0"
+                txt += str(l[8])
+                txt += "\n"
+                txt += "\n"
+            else:
+                txt += str(l[0])
+                txt += " "
+                txt += str(l[7])
+                txt += ":"
+                txt += str(l[8])
+                txt += "\n"
+                txt += "\n"
             
             
     #Images of the screen
@@ -1409,7 +1420,7 @@ def transition_login(user, window):
     #If the matrix is not empty, search the user
     if matrix != []:
         for usr in matrix:
-            if usr[0] == user:
+            if usr[0] == user and usr[2] == "loser":
                 found = True
                 csv_scoreboard.write(matrix)
                 csv_scoreboard.update_matrix("ScoreBoard.csv","w")

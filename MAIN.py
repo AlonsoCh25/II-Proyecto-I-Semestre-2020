@@ -538,15 +538,16 @@ def damage_rooks():
     global health_fireRook, health_waterRook, group
 
     for sand_rook in sandrooks:
-        if pygame.sprite.groupcollide(sandrooks, arrows, False, True):
+        if pygame.sprite.spritecollide(sand_rook, arrows, True):
                 sand_rook.decrease_health(2)
-        elif pygame.sprite.groupcollide(sandrooks, axes, False, True):
+        elif pygame.sprite.spritecollide(sand_rook, axes, True):
             for sand_rook in sandrooks:
                 sand_rook.decrease_health(3)
-        elif pygame.sprite.groupcollide(sandrooks, sticks, False, True):
+        elif pygame.sprite.spritecollide(sand_rook, sticks, True):
                 sand_rook.decrease_health(9)
-        elif pygame.sprite.groupcollide(sandrooks, hammers, False, True):
+        elif pygame.sprite.spritecollide(sand_rook, hammers, True):
                 sand_rook.decrease_health(12)
+
         if sand_rook.health <= 0:
             gridMatrix[int((sand_rook.rect.top - 209) / 80)][int((sand_rook.rect.left - 295) / 95)] = 0
             sand_rook.kill()

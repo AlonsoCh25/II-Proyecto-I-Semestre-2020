@@ -553,39 +553,39 @@ def damage_rooks():
             sand_rook.kill()
 
     for rock_rook in rockrooks:
-        if pygame.sprite.groupcollide(rockrooks, arrows, False, True):
+        if pygame.sprite.spritecollide(rock_rook, arrows, True):
                 rock_rook.decrease_health(2)
-        if pygame.sprite.groupcollide(rockrooks, axes, False, True):
+        if pygame.sprite.spritecollide(rock_rook, axes, True):
                 rock_rook.decrease_health(3)
-        elif pygame.sprite.groupcollide(rockrooks, sticks, False, True):
+        elif pygame.sprite.spritecollide(rock_rook, sticks, True):
                 rock_rook.decrease_health(9)
-        elif pygame.sprite.groupcollide(rockrooks, hammers, False, True):
+        elif pygame.sprite.spritecollide(rock_rook, hammers, True):
                 rock_rook.decrease_health(12)
         if rock_rook.health <= 0:
             gridMatrix[int((rock_rook.rect.top - 295) / 95)][int((rock_rook.rect.left - 209) / 80)] = 0
             rock_rook.kill()
 
     for fire_rook in firerooks:
-        if pygame.sprite.groupcollide(firerooks, arrows, False, True):
+        if pygame.sprite.spritecollide(fire_rook, arrows, True):
             fire_rook.decrease_health(2)
-        if pygame.sprite.groupcollide(firerooks, axes, False, True):
+        if pygame.sprite.spritecollide(fire_rook, axes, True):
             fire_rook.decrease_health(3)
-        elif pygame.sprite.groupcollide(firerooks, sticks, False, True):
+        elif pygame.sprite.spritecollide(fire_rook, sticks, True):
             fire_rook.decrease_health(9)
-        elif pygame.sprite.groupcollide(firerooks, hammers, False, True):
+        elif pygame.sprite.spritecollide(fire_rook, hammers, True):
             fire_rook.decrease_health(12)
         if fire_rook.health <= 0:
             gridMatrix[int((fire_rook.rect.top - 295) / 95)][int((fire_rook.rect.left - 209) / 80)] = 0
             fire_rook.kill()
 
     for water_rook in waterrooks:
-        if pygame.sprite.groupcollide(waterrooks, arrows, False, True):
+        if pygame.sprite.spritecollide(water_rook, arrows, True):
             water_rook.decrease_health(2)
-        if pygame.sprite.groupcollide(waterrooks, axes, False, True):
+        if pygame.sprite.spritecollide(water_rook, axes, True):
             water_rook.decrease_health(3)
-        elif pygame.sprite.groupcollide(waterrooks, sticks, False, True):
+        elif pygame.sprite.spritecollide(water_rook, sticks, True):
             water_rook.decrease_health(9)
-        elif pygame.sprite.groupcollide(waterrooks, hammers, False, True):
+        elif pygame.sprite.spritecollide(water_rook, hammers, True):
             water_rook.decrease_health(12)
         if water_rook.health <= 0:
             gridMatrix[int((water_rook.rect.top - 295) / 95)][int((water_rook.rect.left - 209) / 80)] = 0

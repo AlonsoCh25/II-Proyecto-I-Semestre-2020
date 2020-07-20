@@ -124,38 +124,59 @@ minute, second = 0,0
 
 
 def game_over():
-    global gameover, background, gridMatrix, exit_, contador_6
+    #Place an icon on the window
+    icon = pygame.image.load("rsc/logo_game.png")
+    pygame.display.set_icon(icon)
+    #Settings of the screen
+    pygame.init()
+    pygame.font.init
+    weight, height = 800,600
+    bt_weight,bt_heigth = 70,70
+    game_over_screen = pygame.display.set_mode((weight,height))
+    
+    #Set initial clock
+    clock = pygame.time.Clock()
 
-    if gameover == True:
-        pygame.mixer_music.stop()
-        matrix[row_M][2] = 'winner'
-        background = pygame.image.load('images/game_over.png')
-        pygame.mixer_music.load('Sounds/Game_Over.mp3')
-        pygame.mixer_music.play(-1)
-        gridMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-        sand_attacks.empty()
-        rock_attacks.empty()
-        fire_attacks.empty()
-        water_attacks.empty()
-        sandrooks.empty()
-        rockrooks.empty()
-        firerooks.empty()
-        waterrooks.empty()
-        rooks.empty()
-        buttons.empty()
-        buttons_grid.empty()
-        button_25.empty()
-        button_50.empty()
-        button_100.empty()
-        archeravatars.empty()
-        squireavatars.empty()
-        lumberavatars.empty()
-        cannibalavatars.empty()
-        avatars.empty()
-        gameover = False
-    gameover = False
+    
+    #Images of the screen
+    background = pygame.image.load("images/game_over.png")
+    
+    #Background
+    game_over_screen.blit(pygame.transform.scale(background,(weight,height)),(0,0))
+    
+    img_return=pygame.image.load("rsc/btn_return.png")
+    cursor = Cursor()
+    bt_return =Button(img_return,img_return,(weight-bt_weight-10),(height-100),bt_weight,bt_heigth)
+
+    
+    #While of the loop
+    exit_ = False
+    while exit_ != True:
+        #Set the blits in the screen
+        bt_return.update(game_over_screen,cursor)
+        pygame.display.update()
+        cursor.update()
+        
+        #Set th FPS
+        clock.tick(60)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                #Exit
+                exit_ = True
+                pygame.quit()
+                break
+            #Define the action of the mouse button
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if cursor.colliderect(bt_return.rect):
+                    print("Push Return Menu")
+                    exit_ = True
+                    pygame.quit()
+                    main_window()
+                    break
+                
+        
+    pygame.quit()
 
 
 def next_level(contador_4):
@@ -294,7 +315,7 @@ def avatar_spawn():
 
 
 def avatar_functions():
-    global archermove, squiremove, lumbermove, cannibalmove, currency, avatars_left, avatars_killed, gameover, contador_5, level, FPS
+    global archermove, squiremove, lumbermove, cannibalmove, currency, avatars_left, avatars_killed, gameover, contador_5, level, FPS, exit_,background, gridMatrix, contador_6
 
     for archer in archeravatars:
         archer.move(archermove)
@@ -402,6 +423,28 @@ def avatar_functions():
     for allavatars in avatars:
         if allavatars.rect.top >= 849:
             gameover = True
+            pygame.mixer_music.stop()
+            sand_attacks.empty()
+            rock_attacks.empty()
+            fire_attacks.empty()
+            water_attacks.empty()
+            sandrooks.empty()
+            rockrooks.empty()
+            firerooks.empty()
+            waterrooks.empty()
+            rooks.empty()
+            buttons.empty()
+            buttons_grid.empty()
+            button_25.empty()
+            button_50.empty()
+            button_100.empty()
+            archeravatars.empty()
+            squireavatars.empty()
+            lumberavatars.empty()
+            cannibalavatars.empty()
+            avatars.empty()
+            pygame.quit()
+            
             game_over()
 
 
@@ -570,12 +613,9 @@ def draw_grid(column, row, screen):
 
 
 def principal_window():
-<<<<<<< HEAD
     global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, avatar_spawnTime, new_level, avatars_left, avatars_killed, contador_avatars, max_avatars, exit_, contador_4, minute, second
-=======
     global selected, currency, buttons, FPS, background, rooks, all_sprites, gridMatrix, level, avatar_spawnTime, new_level, avatars_left, avatars_killed, parameter
     print(parameter)
->>>>>>> 500b640e6e407739eaefc4852f479155a7bded11
 
     #Place an icon on the window
     icon = pygame.image.load("rsc/logo_game.png")
